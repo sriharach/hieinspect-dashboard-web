@@ -43,9 +43,9 @@ const SidebarWrapper = () => {
               );
             })}
             <h3 id="manage" className="text-xs font-normal">
-              Manage
+              Manage user
             </h3>
-            {sideBarRoutesPath.manage.map((route) => {
+            {sideBarRoutesPath.manageUser.map((route) => {
               return (
                 <Link
                   draggable={false}
@@ -55,7 +55,29 @@ const SidebarWrapper = () => {
                 >
                   <div
                     className={clsx(styles['sidebar-wrapper-href'], {
-                      'bg-primary-100': pathname === route.href,
+                      'bg-primary-100': pathname.split('/')[1] === route.key,
+                    })}
+                  >
+                    {route.icon}
+                    <span>{route.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
+            <h3 id="manage" className="text-xs font-normal">
+              Manage house
+            </h3>
+            {sideBarRoutesPath.manageHouse.map((route) => {
+              return (
+                <Link
+                  draggable={false}
+                  key={route.key}
+                  href={route.href}
+                  className="text-default-900 active:bg-none max-w-full"
+                >
+                  <div
+                    className={clsx(styles['sidebar-wrapper-href'], {
+                      'bg-primary-100': pathname.split('/')[1] === route.key,
                     })}
                   >
                     {route.icon}

@@ -10,16 +10,10 @@
     }
 
     &-aside-href {
-        // svg {
-        //     @apply fill-main-color;
-        // }
-
-        svg {
-            path {
-                @apply fill-main-color;
-            }
+        svg,
+        path {
+            @apply fill-main-color;
         }
-
         @apply flex flex-col justify-between h-full;
     }
 

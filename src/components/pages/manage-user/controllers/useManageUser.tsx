@@ -2,8 +2,11 @@ import { HeroDeleteIcon, HeroEyeIcon, HeroPencilIcon } from '@/components/assets
 import { ColumnsType } from '@/components/nextui/Tables/type';
 import { IManageUser } from '@/types/models/manageUser';
 import { Tooltip } from '@heroui/react';
+import { useRouter } from 'next/navigation';
 
 const useManageUser = () => {
+  const router = useRouter();
+
   const dataMock: IManageUser[] = [
     {
       id: '1',
@@ -96,7 +99,9 @@ const useManageUser = () => {
     },
   ];
 
-  return { dataSource: dataMock, coloums };
+  const handleAddUser = () => router.push('/manage-user/modify');
+
+  return { dataSource: dataMock, coloums, onManageAddUser: handleAddUser };
 };
 
 export default useManageUser;

@@ -1,7 +1,6 @@
 // libs
-import React, { Key, useMemo } from 'react';
-import { Table as TableNextUi, TableHeader, TableColumn, TableBody } from '@heroui/table';
-import { Card } from '@heroui/react';
+import React, { Key } from 'react';
+import { Table as TableHero, TableHeader, TableColumn, TableBody } from '@heroui/table';
 import { Pagination } from '@heroui/pagination';
 
 // types
@@ -10,21 +9,28 @@ import { TableCell, TableRow } from '@heroui/react';
 
 import styles from './table.module.scss';
 
-const Table = <TData extends object>({ pagination, columns, dataSource }: TablesProps<TData>) => {
+const Table = <TData extends object>({
+  pagination,
+  columns,
+  dataSource,
+  maxTableHeight,
+  ...props
+}: TablesProps<TData>) => {
   return (
-    <Card className={styles['table']}>
-      <TableNextUi
+    <>
+      <TableHero
         radius="none"
         shadow="none"
         aria-label="static collection table"
         color="primary"
-        maxTableHeight={500}
+        maxTableHeight={maxTableHeight || 500}
         rowHeight={70}
         isVirtualized
         classNames={{
           th: 'bg-main-color text-white',
           tr: 'hover:bg-default-100',
         }}
+        {...props}
       >
         <TableHeader columns={columns}>
           {(column) => (
@@ -33,7 +39,7 @@ const Table = <TData extends object>({ pagination, columns, dataSource }: Tables
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={dataSource}>
+        <TableBody emptyContent={<>123</>} items={dataSource}>
           {(item: { [key: string]: any }) => {
             return (
               <TableRow key={item.id}>
@@ -48,14 +54,14 @@ const Table = <TData extends object>({ pagination, columns, dataSource }: Tables
             );
           }}
         </TableBody>
-      </TableNextUi>
+      </TableHero>
 
       {pagination && (
         <div className={styles['table-paginage']}>
           <Pagination isCompact showControls initialPage={1} total={10} />
         </div>
       )}
-    </Card>
+    </>
   );
 };
 

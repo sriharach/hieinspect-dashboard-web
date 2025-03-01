@@ -1,5 +1,9 @@
+'use client';
+import React from 'react';
 export default function Home() {
-  return (
-    <span className='text-center'>ภาษาไทย</span>
-  );
+  React.useEffect(() => {
+    window.location.href = '/sign-in';
+  }, []);
+
+  return <span className="text-center">ภาษาไทย</span>;
 }
