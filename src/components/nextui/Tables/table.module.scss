@@ -1,0 +1,7 @@
+.table {
+    @apply flex-1 flex flex-col p-6 space-y-4;
+
+    &-paginage {
+        @apply flex justify-end;
+    }
+}

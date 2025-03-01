@@ -6,16 +6,18 @@ import { Avatar, Navbar, NavbarContent, NavbarItem } from '@heroui/react';
 import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from '@heroui/dropdown';
 import { useRouter } from 'next/navigation';
 
+import styles from './navbarWrapper.module.scss';
+
 // types
 import { NavbarWrapperProps } from './type';
 
-const NavbarWrapper = ({ children }: NavbarWrapperProps) => {
+const NavbarWrapper = () => {
   const router = useRouter();
   const handleLogout = () => {
     router.push('/sign-in');
   };
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+    <div className={styles['navbar-wrapper']}>
       <Navbar
         isBordered
         className="w-full"
@@ -41,7 +43,6 @@ const NavbarWrapper = ({ children }: NavbarWrapperProps) => {
           </NavbarItem>
         </NavbarContent>
       </Navbar>
-      {children}
     </div>
   );
 };
