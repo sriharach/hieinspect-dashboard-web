@@ -5,19 +5,33 @@ import { Pagination } from '@heroui/pagination';
 
 // types
 import { TablesProps } from './type';
-import { TableCell, TableRow } from '@heroui/react';
+import { Input, TableCell, TableRow } from '@heroui/react';
 
 import styles from './table.module.scss';
+import Button from '../Button/Button';
+import { HeroSearchIcon } from '@/components/assets/icons/hero';
 
 const Table = <TData extends object>({
   pagination,
   columns,
   dataSource,
   maxTableHeight,
+  paginationPage = 1,
+  paginationTotal = 0,
+  serach,
   ...props
 }: TablesProps<TData>) => {
   return (
-    <>
+    <div id="table" aria-description="" className="w-full flex flex-col gap-3">
+      {serach && (
+        <div className="inline-flex max-w-[360px] gap-3">
+          <Input size="sm" variant="bordered" label="Search..." onChange={props.onChangeInputSerach} />
+          <Button className='min-w-[50px]' color="primary" aria-label="button search">
+            <HeroSearchIcon width={18} />
+          </Button>
+        </div>
+      )}
+
       <TableHero
         radius="none"
         shadow="none"
@@ -39,7 +53,7 @@ const Table = <TData extends object>({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={<>123</>} items={dataSource}>
+        <TableBody emptyContent={"No rows to display."} items={dataSource}>
           {(item: { [key: string]: any }) => {
             return (
               <TableRow key={item.id}>
@@ -58,10 +72,10 @@ const Table = <TData extends object>({
 
       {pagination && (
         <div className={styles['table-paginage']}>
-          <Pagination isCompact showControls initialPage={1} total={10} />
+          <Pagination isCompact showControls initialPage={1} page={paginationPage} total={paginationTotal} />
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const ManageRealty = () => {
           + Add Realty
         </Button>
       </div>
-      <Table isHeaderSticky columns={columns} dataSource={dataSource} pagination />
+      <Table isHeaderSticky columns={columns} dataSource={dataSource} pagination paginationTotal={1} />
     </Layout>
   );
 };

@@ -1,4 +1,4 @@
-import { TableProps } from "@heroui/react";
+import { TableProps } from '@heroui/react';
 
 export interface ColumnType<T extends object = object> {
   key?: keyof T;
@@ -7,9 +7,13 @@ export interface ColumnType<T extends object = object> {
 }
 
 export interface TablesProps<TData extends object> extends TableProps {
-  pagination?: boolean;
   dataSource: TData[];
   columns: ColumnsType<TData>;
+  serach?: boolean;
+  pagination?: boolean;
+  paginationTotal?: number;
+  paginationPage?: number;
+  onChangeInputSerach?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export type ColumnsType<T extends object = object> = ColumnType<T>[];

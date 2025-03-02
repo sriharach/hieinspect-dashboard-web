@@ -6,10 +6,12 @@ import styles from './layout.module.scss';
 import { Card } from '@heroui/react';
 
 const Layout = ({ children }: LayoutProps) => {
+  const [collapsed, setCollapsed] = React.useState(false);
+
   return (
     <div className={styles['layout']}>
-      <SidebarWrapper />
-      <NavbarWrapper />
+      <SidebarWrapper collapsed={collapsed} />
+      <NavbarWrapper setCollapsed={setCollapsed} />
       <section className={styles['layout-section']}>
         <Card className={styles['layout-card']} shadow="lg">
           {children}

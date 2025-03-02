@@ -10,12 +10,15 @@ import styles from './navbarWrapper.module.scss';
 
 // types
 import { NavbarWrapperProps } from './type';
+import { HeroMenuNavIcon } from '@/components/assets/icons/hero';
 
-const NavbarWrapper = () => {
+const NavbarWrapper = ({ setCollapsed }: NavbarWrapperProps) => {
   const router = useRouter();
+
   const handleLogout = () => {
     router.push('/sign-in');
   };
+
   return (
     <div className={styles['navbar-wrapper']}>
       <Navbar
@@ -25,6 +28,9 @@ const NavbarWrapper = () => {
           wrapper: 'w-full max-w-full',
         }}
       >
+        <NavbarContent className="inline-flex md:hidden items-center">
+          <HeroMenuNavIcon role="button" onClick={() => setCollapsed((prev) => !prev)} />
+        </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
             <Dropdown>

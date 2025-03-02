@@ -10,13 +10,18 @@ import { usePathname } from 'next/navigation';
 import styles from './sidebarWrapper.module.scss';
 
 import { sideBarRoutesPath } from './routesPath';
+import { SideBarWrapperProps } from './type';
 
-const SidebarWrapper = () => {
+const SidebarWrapper = ({ collapsed }: SideBarWrapperProps) => {
   const pathname = usePathname();
 
   return (
     <aside className={styles['sidebar-wrapper-aside']}>
-      <div className={styles['sidebar-wrapper']}>
+      <div
+        className={clsx(styles['sidebar-wrapper'], {
+          '!translate-x-0': collapsed,
+        })}
+      >
         <h1 className={styles['sidebar-wrapper-aside-header']}>HIEspect</h1>
         <div className={styles['sidebar-wrapper-aside-href']}>
           <div className="flex flex-col flex-1 gap-3">

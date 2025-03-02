@@ -1,0 +1,3 @@
+import type { SVGProps } from "react";
+const SvgSearchIcon = (props: SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width={props.width || 24} height={props.height || 24} className="search-icon_svg__icon" viewBox="0 0 1024 1024" {...props}><path fill="currentColor" d="M448 768a320 320 0 1 0 0-640 320 320 0 0 0 0 640m297.344-76.992L959.936 905.6 905.6 959.936 691.008 745.344a384 384 0 1 1 54.336-54.336" /></svg>;
+export default SvgSearchIcon;
