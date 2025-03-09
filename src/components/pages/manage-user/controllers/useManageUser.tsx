@@ -1,48 +1,34 @@
 import { HeroDeleteIcon, HeroEyeIcon, HeroPencilIcon } from '@/components/assets/icons/hero';
 import { ColumnsType } from '@/components/nextui/Tables/type';
-import { IManageUser } from '@/types/models/manageUser';
+import useManageUserService from '@/hooks/useQuery/useManageUser';
+import { IManageUserDataSoure } from '@/types/models/manageUser';
 import { Tooltip } from '@heroui/react';
 import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 const useManageUser = () => {
   const router = useRouter();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [search, setSearch] = useState('');
 
-  const dataMock: IManageUser[] = [
-    {
-      id: '1',
-      user_name: 'Tony Reichert',
-      role: 'SuperAdmin',
-      first_name: 'Tony',
-      created_date: '2021-09-01',
-      is_active: true,
-    },
-    {
-      id: '2',
-      user_name: 'Zoey Lang',
-      role: 'Member',
-      first_name: 'Zoey',
-      created_date: '2021-09-01',
-      is_active: true,
-    },
-    {
-      id: '3',
-      user_name: 'William Howard',
-      role: 'Member',
-      first_name: 'William',
-      created_date: '2021-09-01',
-      is_active: true,
-    },
-    {
-      id: '4',
-      user_name: 'Jane Fisher',
-      role: 'Member',
-      first_name: 'Jane',
-      created_date: '2021-09-01',
-      is_active: true,
-    },
-  ];
+  const { data } = useManageUserService({ page, limit, search });
 
-  const coloums: ColumnsType<IManageUser> = [
+  const dataSource: IManageUserDataSoure[] = useMemo(() => {
+    if (data) {
+      return data.data.data.data.map((item) => ({
+        id: item.id,
+        user_name: item.user_name,
+        first_name: item.first_name,
+        role: item.role.name,
+        created_date: new Date(item.created_date).toLocaleString('th-TH'),
+        is_active: item.is_active,
+      })) as IManageUserDataSoure[];
+    }
+    return [];
+  }, [data]);
+
+  const coloums: ColumnsType<IManageUserDataSoure> = [
     {
       key: 'user_name',
       title: 'Username',
@@ -101,7 +87,15 @@ const useManageUser = () => {
 
   const handleAddUser = () => router.push('/manage-user/modify');
 
-  return { dataSource: dataMock, coloums, onManageAddUser: handleAddUser };
+  return {
+    dataSource,
+    coloums,
+    paginationPage: page,
+    paginationTotal: data?.data.data.meta.totalPages,
+    onManageAddUser: handleAddUser,
+    onChangePage: (page: number) => setPage(page),
+    onPressSearchButton: (search: string) => setSearch(search),
+  };
 };
 
 export default useManageUser;

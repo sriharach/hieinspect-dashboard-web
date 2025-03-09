@@ -1,11 +1,17 @@
 import { HeroDeleteIcon, HeroEyeIcon, HeroPencilIcon } from '@/components/assets/icons/hero';
 import { ColumnsType } from '@/components/nextui/Tables/type';
+import useManageRole from '@/hooks/useQuery/useManageRole';
+import { GET_ROLE_SERVICE } from '@/services';
 import { IManageRoles } from '@/types/models/manageRoles';
 import { Tooltip } from '@heroui/react';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 const useManageRoles = () => {
   const router = useRouter();
+
+  const { data } = useManageRole();
+  console.log('data', data?.data);
 
   const columns: ColumnsType<IManageRoles> = [
     {
@@ -16,10 +22,10 @@ const useManageRoles = () => {
       key: 'created_date',
       title: 'Created Date',
     },
-    {
-      key: 'created_by',
-      title: 'Created By',
-    },
+    // {
+    //   key: 'created_by',
+    //   title: 'Created By',
+    // },
     {
       title: 'Action',
       render: () => {
@@ -41,14 +47,17 @@ const useManageRoles = () => {
     },
   ];
 
-  const dataSource: IManageRoles[] = [
-    {
-      name: 'Super Admin',
-      id: '1',
-      created_date: new Date().toISOString(),
-      created_by: 'Admin',
-    },
-  ];
+  const dataSource = useMemo<IManageRoles[]>(() => {
+    if (data?.data) {
+      return data.data.map((item) => ({
+        id: item.id,
+        name: item.name,
+        created_date: new Date(item.created_date).toLocaleString('th-TH'),
+        created_by: item.created_by,
+      }));
+    }
+    return [];
+  }, [data]);
 
   const handleAddRoles = () => {
     router.push('/manage-role/modify');

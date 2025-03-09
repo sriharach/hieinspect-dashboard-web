@@ -1,8 +1,16 @@
-export interface IManageUser {
-    id: string;
-    user_name: string;
-    role: string;
-    is_active: boolean;
-    first_name: string;
-    created_date: string;
+export interface IManageUserDataSoure {
+  id: string;
+  user_name: string;
+  is_active: boolean;
+  first_name: string;
+  last_name: string | null;
+  created_date: string;
+  role: string;
+}
+
+export interface IreponseDataManageUser extends Omit<IManageUserDataSoure, 'role'> {
+    role: {
+        id: string,
+        name: string
+    }
 }

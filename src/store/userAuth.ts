@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 import Cookie from 'js-cookie';
 import { IDecodePayload } from '@/types/models/signIn';
+import axiosConfig from '@/services/axiosConfig';
+import { AxiosError } from 'axios';
 
 export interface useAuthProps {
   user: IDecodePayload | undefined;
@@ -11,10 +13,24 @@ export interface useAuthProps {
   signOut: () => void;
 }
 
-export const useAuth = create<useAuthProps>((set) => {
-  const authenticate = (accessToken: string) => {
+export const useAuth = create<useAuthProps>((set, get) => {
+  const authenticate = async (accessToken: string) => {
     Cookie.set('client-token', accessToken, { sameSite: 'strict' });
     if (accessToken) {
+      axiosConfig.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      axiosConfig.interceptors.response.use(
+        (response) => response,
+        async (error) => {
+          if (error instanceof AxiosError) {
+            if (error.response?.status === 403) {
+              get().signOut();
+            }
+            return Promise.reject(error);
+          }
+        },
+      );
+
+      // await GET_USER_SERVICE()
       const decode = jwtDecode<IDecodePayload>(accessToken);
       set(() => ({ isAuthenticated: true, user: decode }));
     }
@@ -28,6 +44,7 @@ export const useAuth = create<useAuthProps>((set) => {
 
   const signOut = () => {
     Cookie.remove('client-token');
+    // axiosConfig.interceptors.response.eject()
     set(() => ({ isAuthenticated: false, user: undefined }));
   };
 

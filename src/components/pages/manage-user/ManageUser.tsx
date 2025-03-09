@@ -11,7 +11,14 @@ import Button from '@/components/nextui/Button/Button';
 import useManageUser from './controllers/useManageUser';
 
 const ManageUser = () => {
-  const { dataSource, coloums, onManageAddUser } = useManageUser();
+  const {
+    dataSource,
+    coloums,
+    paginationTotal,
+    onManageAddUser,
+    onChangePage,
+    onPressSearchButton,
+  } = useManageUser();
 
   return (
     <Layout>
@@ -21,7 +28,15 @@ const ManageUser = () => {
           + Add user
         </Button>
       </div>
-      <Table pagination columns={coloums} dataSource={dataSource} />
+      <Table
+        serach
+        pagination
+        paginationTotal={paginationTotal}
+        columns={coloums}
+        dataSource={dataSource}
+        onChangePage={onChangePage}
+        onPressSearchButton={onPressSearchButton}
+      />
     </Layout>
   );
 };
