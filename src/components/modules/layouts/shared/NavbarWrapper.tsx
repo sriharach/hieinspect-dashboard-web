@@ -4,20 +4,18 @@
 import React from 'react';
 import { Avatar, Navbar, NavbarContent, NavbarItem } from '@heroui/react';
 import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from '@heroui/dropdown';
-import { useRouter } from 'next/navigation';
 
 import styles from './navbarWrapper.module.scss';
 
 // types
 import { NavbarWrapperProps } from './type';
 import { HeroMenuNavIcon } from '@/components/assets/icons/hero';
+import { useAuth } from '@/store/userAuth';
 
 const NavbarWrapper = ({ setCollapsed }: NavbarWrapperProps) => {
-  const router = useRouter();
+  const { signOut, user } = useAuth();
 
-  const handleLogout = () => {
-    router.push('/sign-in');
-  };
+  const handleLogout = () => signOut();
 
   return (
     <div className={styles['navbar-wrapper']}>
@@ -35,11 +33,11 @@ const NavbarWrapper = ({ setCollapsed }: NavbarWrapperProps) => {
           <NavbarItem>
             <Dropdown>
               <DropdownTrigger>
-                <Avatar as="button" size="md" name="U" />
+                <Avatar as="button" size="md" name={user?.username.substring(0, 1).toUpperCase()} />
               </DropdownTrigger>
               <DropdownMenu disabledKeys={['profile']}>
                 <DropdownItem key={'profile'} className="flex flex-col justify-start w-full items-start">
-                  <p className="text-black">Signed in as zoey@example.com</p>
+                  <p className="text-black">Signed in as {user?.username}</p>
                 </DropdownItem>
                 <DropdownItem key="logout" color="danger" className="text-danger" onPress={handleLogout}>
                   Sign Out

@@ -5,5 +5,5 @@ export default function Home() {
     window.location.href = '/sign-in';
   }, []);
 
-  return <span className="text-center">ภาษาไทย</span>;
+  return <React.Fragment />
 }
