@@ -4,17 +4,23 @@
 import AuthLayout from '@/components/modules/layouts/AuthLayout';
 
 // libs
-import React from 'react';
-import { Input, Button } from '@heroui/react';
+import React, { useEffect } from 'react';
+import { Input, Button, addToast } from '@heroui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 // types
 import { RequestSignIn } from '@/types/models/signIn';
+import useAuthSignIn from '@/hooks/useMutation/useAuthSignIn';
+import { useAuth } from '@/store/userAuth';
+import { AxiosError } from 'axios';
 
 const SignIn = () => {
   // router
   const router = useRouter();
+
+  const { mutate, isPending } = useAuthSignIn();
+  const { authenticate, isAuthenticated } = useAuth();
 
   // form
   const {
@@ -22,16 +28,29 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RequestSignIn>({
-    defaultValues: {
-      username: 'admin',
-      password: '1234',
-    },
+    // defaultValues: {
+    //   username: 'admin',
+    //   password: '1234',
+    // },
   });
 
   const handleSubmitLogin = handleSubmit((data) => {
-    console.log('data :>> ', data);
-    router.push('/dashboard');
+    mutate(data, {
+      onSuccess: (response) => {
+        authenticate(response.data.data.access_token);
+        router.push('/dashboard');
+      },
+      onError: (err) => {
+        if (err instanceof AxiosError) {
+          addToast({ title: err.response?.data.message, color: 'danger' });
+        }
+      },
+    });
   });
+
+  useEffect(() => {
+    if (isAuthenticated) router.forward();
+  }, [isAuthenticated]);
 
   return (
     <AuthLayout>
@@ -55,7 +74,7 @@ const SignIn = () => {
             label="Password"
             type="password"
           />
-          <Button color="primary" type="submit" className="p-2 text-white">
+          <Button color="primary" type="submit" className="p-2 text-white" isLoading={isPending}>
             Login
           </Button>
         </form>
