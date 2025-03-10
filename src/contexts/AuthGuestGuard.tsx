@@ -31,7 +31,7 @@ const AuthGuestGuard = ({ children }: { children: React.ReactNode }) => {
         router.push(pathName);
       }
     }
-  }, [isAuthenticated, pathName, router, whiteListAuth]);
+  }, [isAuthenticated, pathName, router, user?.role_name, whiteList, whiteListAuth]);
 
   useLayoutEffect(() => {
     initialize();

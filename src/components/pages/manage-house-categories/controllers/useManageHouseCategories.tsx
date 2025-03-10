@@ -1,7 +1,7 @@
 import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
 import { ColumnsType } from '@/components/nextui/Tables/type';
-import useManageRoleRemove from '@/hooks/useMutation/useManageHouseCategoriesRemove';
-import useManageUserService from '@/hooks/useQuery/useManageCategories';
+import useManageHouseCategoriesRemove from '@/hooks/useMutation/useManageHouseCategoriesRemove';
+import useManageCategories from '@/hooks/useQuery/useManageCategories';
 import { IManageHouseCategories } from '@/types/models/manageHouseCategories';
 import { addToast } from '@heroui/react';
 import dayjs from 'dayjs';
@@ -12,8 +12,8 @@ const useManageHouseCategories = () => {
   const router = useRouter();
 
   // hook
-  const { data, isLoading, isFetching, refetch } = useManageUserService();
-  const { mutate } = useManageRoleRemove();
+  const { data, isLoading, isFetching, refetch } = useManageCategories();
+  const { mutate } = useManageHouseCategoriesRemove();
 
   const columns: ColumnsType<IManageHouseCategories> = [
     {
