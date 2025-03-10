@@ -13,7 +13,9 @@ export interface TablesProps<TData extends object> extends TableProps {
   pagination?: boolean;
   paginationTotal?: number;
   paginationPage?: number;
-  onChangeInputSerach?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isLoading?: boolean
+  onChangePage?: (page: number) => void
+  onPressSearchButton?: (search: string) => void
 }
 
 export type ColumnsType<T extends object = object> = ColumnType<T>[];

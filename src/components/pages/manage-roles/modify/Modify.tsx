@@ -9,24 +9,31 @@ import Layout from '@/components/modules/layouts/Layout';
 import Button from '@/components/nextui/Button/Button';
 
 import styles from './modify.module.scss';
-import { useRouter } from 'next/navigation';
+import useModifyRole from '../controllers/useModifyRole';
 
 const Modify = () => {
-  const router = useRouter();
-
-  const handleCancelModify = () => {
-    router.back();
-  };
+  const { errorMessage, handleCancelModify, handleSubmitForm, setRole } =
+    useModifyRole();
 
   return (
     <Layout>
       <form className={styles['modify-content']}>
-        <Input label="Role" />
+        <Input
+          errorMessage={errorMessage}
+          isInvalid={!!errorMessage}
+          label="Role"
+          onChange={(e) => setRole(e.target.value)}
+        />
         <div className={styles['modify-content-button']}>
-          <Button fullWidth color="primary" type="submit">
+          <Button fullWidth color="primary" onPress={handleSubmitForm}>
             Submit
           </Button>
-          <Button fullWidth color="primary" variant="ghost" onPress={handleCancelModify}>
+          <Button
+            fullWidth
+            color="primary"
+            variant="ghost"
+            onPress={handleCancelModify}
+          >
             Cancel
           </Button>
         </div>

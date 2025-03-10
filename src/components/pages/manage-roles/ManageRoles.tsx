@@ -7,17 +7,22 @@ import useManageRoles from './controllers/useManageRoles';
 import Button from '@/components/nextui/Button/Button';
 
 const ManageRoles = () => {
-  const { columns, dataSource, onManageAddRoles } = useManageRoles();
+  const { columns, dataSource, isLoading, onManageAddRoles } = useManageRoles();
 
   return (
     <Layout>
       <div className="flex flex-1 justify-between">
         <h2 className="text-3xl">Manage Roles</h2>
-        <Button color="primary" variant="flat" className="min-w-[120px]" onPress={onManageAddRoles}>
+        <Button
+          color="primary"
+          variant="flat"
+          className="min-w-[120px]"
+          onPress={onManageAddRoles}
+        >
           + Add Role
         </Button>
       </div>
-      <Table columns={columns} dataSource={dataSource} pagination />
+      <Table columns={columns} dataSource={dataSource} isLoading={isLoading} />
     </Layout>
   );
 };

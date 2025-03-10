@@ -1,29 +1,20 @@
 //  lib
 import React from 'react';
-import Image from 'next/image';
-import { Divider } from '@heroui/react';
 import { AuthLayoutProps } from './type';
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="flex h-screen">
-      <div className="flex-1 flex-col flex items-center justify-center md:p-6 p-4">
-        <div className="absolute left-0 right-0 bottom-0 top-0 z-0">
-          <Image
-            draggable={false}
-            width={100}
-            height={100}
-            className="w-full h-full"
-            src="https://nextui.org/gradients/docs-right.png"
-            alt="gradient"
-          />
-        </div>
-        {children}
+    <div className="relative items-center flex h-screen justify-center max-h-[860px] md:px-6 px-4">
+      <div className="absolute right-0 top-0 z-0">
+        <img
+          draggable={false}
+          width={600}
+          height={600}
+          src="/pattern_react.webp"
+          alt="gradient"
+        />
       </div>
-
-      <div className="hidden my-10 md:block">
-        <Divider className="text-red" orientation="vertical" />
-      </div>
+      {children}
     </div>
   );
 };

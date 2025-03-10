@@ -1,18 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // experimental: {
-  //   clientRouterFilterAllowedRate: 1
-  // },
+  env: {
+    API_URL: process.env.API_URL,
+  },
+  output: 'export',
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'nextui.org',
-        // pathname: '/account123/**',
-      }
-    ]
-  }
+    unoptimized: process.env.NODE_ENV === 'development',
+    path: '/_next/image',
+  },
 };
 
 export default nextConfig;

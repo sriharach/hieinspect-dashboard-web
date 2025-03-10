@@ -1,6 +1,8 @@
 export { default as HeroDeleteIcon } from './DeleteIcon'
 export { default as HeroEyeIcon } from './EyeIcon'
 export { default as HeroHomeIcon } from './HomeIcon'
+export { default as HeroHouseBuildIcon } from './HouseBuildIcon'
+export { default as HeroHouseRealtysIcon } from './HouseRealtysIcon'
 export { default as HeroManageSpectHouse } from './ManageSpectHouse'
 export { default as HeroManageUserIcon } from './ManageUserIcon'
 export { default as HeroMenuNavIcon } from './MenuNavIcon'

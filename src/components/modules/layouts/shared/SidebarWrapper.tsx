@@ -11,9 +11,12 @@ import styles from './sidebarWrapper.module.scss';
 
 import { sideBarRoutesPath } from './routesPath';
 import { SideBarWrapperProps } from './type';
+import { useAuth } from '@/store/userAuth';
 
 const SidebarWrapper = ({ collapsed }: SideBarWrapperProps) => {
   const pathname = usePathname();
+
+  const { user } = useAuth();
 
   return (
     <aside className={styles['sidebar-wrapper-aside']}>
@@ -47,28 +50,33 @@ const SidebarWrapper = ({ collapsed }: SideBarWrapperProps) => {
                 </Link>
               );
             })}
-            <h3 id="manage" className="text-xs font-normal">
-              Manage user
-            </h3>
-            {sideBarRoutesPath.manageUser.map((route) => {
-              return (
-                <Link
-                  draggable={false}
-                  key={route.key}
-                  href={route.href}
-                  className="text-default-900 active:bg-none max-w-full"
-                >
-                  <div
-                    className={clsx(styles['sidebar-wrapper-href'], {
-                      'bg-primary-100': pathname.split('/')[1] === route.key,
-                    })}
-                  >
-                    {route.icon}
-                    <span>{route.name}</span>
-                  </div>
-                </Link>
-              );
-            })}
+            {user?.role_name.toUpperCase() == 'ADMIN' && (
+              <>
+                <h3 id="manage" className="text-xs font-normal">
+                  Manage user
+                </h3>
+                {sideBarRoutesPath.manageUser.map((route) => {
+                  return (
+                    <Link
+                      draggable={false}
+                      key={route.key}
+                      href={route.href}
+                      className="text-default-900 active:bg-none max-w-full"
+                    >
+                      <div
+                        className={clsx(styles['sidebar-wrapper-href'], {
+                          'bg-primary-100':
+                            pathname.split('/')[1] === route.key,
+                        })}
+                      >
+                        {route.icon}
+                        <span>{route.name}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </>
+            )}
             <h3 id="manage" className="text-xs font-normal">
               Manage house
             </h3>

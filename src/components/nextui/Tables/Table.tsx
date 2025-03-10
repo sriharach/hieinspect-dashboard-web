@@ -1,11 +1,16 @@
 // libs
-import React, { Key } from 'react';
-import { Table as TableHero, TableHeader, TableColumn, TableBody } from '@heroui/table';
+import React, { Key, useState } from 'react';
+import {
+  Table as TableHero,
+  TableHeader,
+  TableColumn,
+  TableBody,
+} from '@heroui/table';
 import { Pagination } from '@heroui/pagination';
 
 // types
 import { TablesProps } from './type';
-import { Input, TableCell, TableRow } from '@heroui/react';
+import { Input, Spinner, TableCell, TableRow } from '@heroui/react';
 
 import styles from './table.module.scss';
 import Button from '../Button/Button';
@@ -19,14 +24,26 @@ const Table = <TData extends object>({
   paginationPage = 1,
   paginationTotal = 0,
   serach,
+  isLoading,
   ...props
 }: TablesProps<TData>) => {
+  const [onSearch, setOnsearch] = useState('');
   return (
     <div id="table" aria-description="" className="w-full flex flex-col gap-3">
       {serach && (
         <div className="inline-flex max-w-[360px] gap-3">
-          <Input size="sm" variant="bordered" label="Search..." onChange={props.onChangeInputSerach} />
-          <Button className='min-w-[50px]' color="primary" aria-label="button search">
+          <Input
+            size="sm"
+            variant="bordered"
+            label="Search..."
+            onChange={(e) => setOnsearch(e.target.value)}
+          />
+          <Button
+            className="min-w-[50px]"
+            color="primary"
+            aria-label="button search"
+            onPress={() => props.onPressSearchButton?.(onSearch)}
+          >
             <HeroSearchIcon width={18} />
           </Button>
         </div>
@@ -53,14 +70,20 @@ const Table = <TData extends object>({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={dataSource}>
+        <TableBody
+          emptyContent={'No rows to display.'}
+          isLoading={isLoading}
+          loadingContent={<Spinner />}
+          items={dataSource}
+        >
           {(item: { [key: string]: any }) => {
             return (
               <TableRow key={item.id}>
                 {columns.map((column) => {
                   return (
                     <TableCell key={`item-${column.key as Key}`}>
-                      {(column.render && column.render(item as never)) || item[column.key as never]}
+                      {(column.render && column.render(item as never)) ||
+                        item[column.key as never]}
                     </TableCell>
                   );
                 })}
@@ -72,7 +95,14 @@ const Table = <TData extends object>({
 
       {pagination && (
         <div className={styles['table-paginage']}>
-          <Pagination isCompact showControls initialPage={1} page={paginationPage} total={paginationTotal} />
+          <Pagination
+            isCompact
+            showControls
+            initialPage={1}
+            page={paginationPage}
+            total={paginationTotal}
+            onChange={props.onChangePage}
+          />
         </div>
       )}
     </div>
