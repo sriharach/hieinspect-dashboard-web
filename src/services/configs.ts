@@ -1,8 +1,10 @@
-const ENDPOINT = process.env.NEXT_PUBLIC_SERVICE_HOST
+const ENDPOINT = process.env.API_URL;
 
 export const serviceConfig = {
   AUTH_LOGIN: `${ENDPOINT}/auth/login`,
 
   USER_MANAGE: `${ENDPOINT}/user`,
-  ROLE_MANAGE: `${ENDPOINT}/role`
+  ROLE_MANAGE: `${ENDPOINT}/role`,
+
+  CATEGORIES_MANAGE: `${ENDPOINT}/category_house`,
 } as const;

@@ -1,17 +1,18 @@
-import { HeroDeleteIcon, HeroEyeIcon, HeroPencilIcon } from '@/components/assets/icons/hero';
+import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
 import { ColumnsType } from '@/components/nextui/Tables/type';
+import useManageRoleRemove from '@/hooks/useMutation/useManageRoleRemove';
 import useManageRole from '@/hooks/useQuery/useManageRole';
-import { GET_ROLE_SERVICE } from '@/services';
 import { IManageRoles } from '@/types/models/manageRoles';
-import { Tooltip } from '@heroui/react';
+import { addToast } from '@heroui/react';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
 const useManageRoles = () => {
   const router = useRouter();
 
-  const { data } = useManageRole();
-  console.log('data', data?.data);
+  const { data, isLoading, isFetching, refetch } = useManageRole();
+  const { mutate } = useManageRoleRemove();
 
   const columns: ColumnsType<IManageRoles> = [
     {
@@ -21,6 +22,9 @@ const useManageRoles = () => {
     {
       key: 'created_date',
       title: 'Created Date',
+      render: (data) => {
+        return dayjs(data.created_date).format('DD/MM/YYYY H:mm');
+      },
     },
     // {
     //   key: 'created_by',
@@ -28,19 +32,27 @@ const useManageRoles = () => {
     // },
     {
       title: 'Action',
-      render: () => {
+      render: (data) => {
         return (
           <div className="flex items-center gap-4">
-            <Tooltip content="Edit user">
+            {/* <Tooltip content="Edit user">
               <button className="text-[#979797]">
                 <HeroPencilIcon width={20} />
               </button>
-            </Tooltip>
-            <Tooltip content="Delete user" color="danger">
-              <button className="text-red-500">
-                <HeroDeleteIcon width={20} />
-              </button>
-            </Tooltip>
+            </Tooltip> */}
+            <ButtonRemoveRow
+              onPress={() => {
+                mutate(data.id, {
+                  onSuccess: () => {
+                    addToast({
+                      color: 'success',
+                      title: 'Role Deleted',
+                    });
+                    refetch();
+                  },
+                });
+              }}
+            />
           </div>
         );
       },
@@ -62,7 +74,13 @@ const useManageRoles = () => {
   const handleAddRoles = () => {
     router.push('/manage-role/modify');
   };
-  return { columns, dataSource, onManageAddRoles: handleAddRoles };
+
+  return {
+    columns,
+    dataSource,
+    isLoading: isLoading || isFetching,
+    onManageAddRoles: handleAddRoles,
+  };
 };
 
 export default useManageRoles;

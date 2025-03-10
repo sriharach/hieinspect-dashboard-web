@@ -12,7 +12,7 @@
     &-aside-href {
         svg,
         path {
-            @apply fill-main-color;
+            @apply fill-main-color stroke-main-color;
         }
         @apply flex flex-col justify-between h-full;
     }

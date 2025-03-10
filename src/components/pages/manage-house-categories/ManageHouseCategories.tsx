@@ -2,44 +2,39 @@
 
 // libs
 import React from 'react';
+import useManageHouseCategories from './controllers/useManageHouseCategories';
 
 // components
 import Layout from '@/components/modules/layouts/Layout';
 import Table from '@/components/nextui/Tables/Table';
 import Button from '@/components/nextui/Button/Button';
 
-import useManageUser from './controllers/useManageUser';
-
-const ManageUser = () => {
+const ManageHouseCategories = () => {
   const {
-    dataSource,
-    coloums,
-    paginationTotal,
     isLoading,
-    onManageAddUser,
+    columns,
+    dataSource,
+    onManageAddCategoreis,
     onChangePage,
     onPressSearchButton,
-  } = useManageUser();
+  } = useManageHouseCategories();
 
   return (
     <Layout>
       <div className="flex flex-1 justify-between">
-        <h2 className="text-3xl">Manage Users</h2>
+        <h2 className="text-3xl">Manage House Categories</h2>
         <Button
           color="primary"
           variant="flat"
           className="min-w-[120px]"
-          onPress={onManageAddUser}
+          onPress={onManageAddCategoreis}
         >
-          + Add user
+          + Add House Category
         </Button>
       </div>
       <Table
         isLoading={isLoading}
-        serach
-        pagination
-        paginationTotal={paginationTotal}
-        columns={coloums}
+        columns={columns}
         dataSource={dataSource}
         onChangePage={onChangePage}
         onPressSearchButton={onPressSearchButton}
@@ -48,4 +43,4 @@ const ManageUser = () => {
   );
 };
 
-export default ManageUser;
+export default ManageHouseCategories;

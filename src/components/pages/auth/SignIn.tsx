@@ -54,11 +54,15 @@ const SignIn = () => {
 
   return (
     <AuthLayout>
-      <div className="text-center text-4xl font-bold mb-6">Login</div>
       <div className="border rounded-lg bg-transparent max-w-[640px] w-full p-8 backdrop-blur-lg">
+        <div className="text-center text-4xl font-bold mb-6">
+          Hieinspect Login
+        </div>
         <form className="flex flex-col space-y-4" onSubmit={handleSubmitLogin}>
           <Input
-            {...register('username', { required: { value: true, message: 'Request!' } })}
+            {...register('username', {
+              required: { value: true, message: 'Request!' },
+            })}
             autoComplete="off"
             errorMessage={errors.username?.message}
             isInvalid={!!errors.username?.message}
@@ -66,7 +70,9 @@ const SignIn = () => {
             label="Username / Email"
           />
           <Input
-            {...register('password', { required: { value: true, message: 'Request!' } })}
+            {...register('password', {
+              required: { value: true, message: 'Request!' },
+            })}
             autoComplete="off"
             errorMessage={errors.password?.message}
             isInvalid={!!errors.password?.message}
@@ -74,7 +80,12 @@ const SignIn = () => {
             label="Password"
             type="password"
           />
-          <Button color="primary" type="submit" className="p-2 text-white" isLoading={isPending}>
+          <Button
+            color="primary"
+            type="submit"
+            className="p-2 text-white"
+            isLoading={isPending}
+          >
             Login
           </Button>
         </form>

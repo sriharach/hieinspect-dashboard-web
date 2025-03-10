@@ -1,28 +1,26 @@
 'use client';
 
 // libs
-import React from 'react';
 import { Input } from '@heroui/react';
+import React from 'react';
+import useModifyHouseCategories from '../controllers/useModifyHouseCategories';
 
-// components
+// component
 import Layout from '@/components/modules/layouts/Layout';
 import Button from '@/components/nextui/Button/Button';
-
 import styles from './modify.module.scss';
-import useModifyRole from '../controllers/useModifyRole';
 
 const Modify = () => {
-  const { errorMessage, handleCancelModify, handleSubmitForm, setRole } =
-    useModifyRole();
-
+  const { errorMessage, setCategory, handleCancelModify, handleSubmitForm } =
+    useModifyHouseCategories();
   return (
     <Layout>
       <form className={styles['modify-content']}>
         <Input
           errorMessage={errorMessage}
           isInvalid={!!errorMessage}
-          label="Role"
-          onChange={(e) => setRole(e.target.value)}
+          label="Category"
+          onChange={(e) => setCategory(e.target.value)}
         />
         <div className={styles['modify-content-button']}>
           <Button fullWidth color="primary" onPress={handleSubmitForm}>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const endpoint = process.env.NEXT_PUBLIC_SERVICE_HOST as string;
+const endpoint = process.env.API_URL as string;
 
 export default axios.create({
   baseURL: endpoint,

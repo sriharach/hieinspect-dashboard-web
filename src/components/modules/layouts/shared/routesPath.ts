@@ -3,6 +3,8 @@ import {
   HeroManageUserIcon,
   HeroManageSpectHouse,
   HeroUserRoleIcon,
+  HeroHouseRealtysIcon,
+  HeroHouseBuildIcon
 } from '@/components/assets/icons/hero';
 import { createElement } from 'react';
 
@@ -37,10 +39,16 @@ export const sideBarRoutesPath = {
       name: 'Manage House',
     },
     {
-      icon: createElement(HeroManageSpectHouse),
+      icon: createElement(HeroHouseRealtysIcon),
       key: 'manage-realty',
       href: '/manage-realty',
       name: 'Manage Realtys',
+    },
+    {
+      icon: createElement(HeroHouseBuildIcon),
+      key: 'manage-house-categories',
+      href: '/manage-house-categories',
+      name: 'Manage House Categories',
     },
   ],
 };

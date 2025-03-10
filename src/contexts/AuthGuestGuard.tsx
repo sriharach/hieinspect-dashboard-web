@@ -6,12 +6,13 @@ import Loading from '@/components/nextui/Loading/Loading';
 import { useAuth } from '@/store/userAuth';
 
 const AuthGuestGuard = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, initialize } = useAuth();
+  const { isAuthenticated, initialize, user } = useAuth();
 
   const router = useRouter();
   const pathName = usePathname();
 
   const whiteListAuth = useMemo(() => ['/sign-in'], []);
+  const whiteList = useMemo(() => ['/manage-user', '/manage-role'], []);
 
   useEffect(() => {
     if (!whiteListAuth.includes(pathName) && !isAuthenticated) {
@@ -19,6 +20,13 @@ const AuthGuestGuard = ({ children }: { children: React.ReactNode }) => {
     }
 
     if (isAuthenticated) {
+      if (
+        user?.role_name.toUpperCase() != 'ADMIN' &&
+        whiteList.includes(pathName)
+      ) {
+        router.back();
+      }
+
       if (!whiteListAuth.includes(pathName) && pathName) {
         router.push(pathName);
       }

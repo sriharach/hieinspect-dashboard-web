@@ -22,7 +22,7 @@ export const useAuth = create<useAuthProps>((set, get) => {
         (response) => response,
         async (error) => {
           if (error instanceof AxiosError) {
-            if (error.response?.status === 403) {
+            if (error.response?.status === 403 || error.response?.status === 401) {
               get().signOut();
             }
             return Promise.reject(error);

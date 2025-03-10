@@ -13,6 +13,7 @@ export interface TablesProps<TData extends object> extends TableProps {
   pagination?: boolean;
   paginationTotal?: number;
   paginationPage?: number;
+  isLoading?: boolean
   onChangePage?: (page: number) => void
   onPressSearchButton?: (search: string) => void
 }
