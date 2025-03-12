@@ -11,27 +11,31 @@ import Button from '@/components/nextui/Button/Button';
 import styles from './modify.module.scss';
 
 const Modify = () => {
-  const { errorMessage, setCategory, handleCancelModify, handleSubmitForm } =
-    useModifyHouseCategories();
+  const { errors, control, Controller, handleCancelModify, handleSubmitForm } = useModifyHouseCategories();
   return (
     <Layout>
-      <form className={styles['modify-content']}>
-        <Input
-          errorMessage={errorMessage}
-          isInvalid={!!errorMessage}
-          label="Category"
-          onChange={(e) => setCategory(e.target.value)}
+      <form className={styles['modify-content']} onSubmit={handleSubmitForm}>
+        <Controller
+          control={control}
+          name="name"
+          rules={{ required: { value: true, message: 'Request!' } }}
+          render={({ field }) => {
+            return (
+              <Input
+                {...field}
+                errorMessage={errors.name?.message}
+                isInvalid={!!errors.name?.message}
+                label="Category"
+              />
+            );
+          }}
         />
+
         <div className={styles['modify-content-button']}>
-          <Button fullWidth color="primary" onPress={handleSubmitForm}>
+          <Button fullWidth color="primary" type="submit">
             Submit
           </Button>
-          <Button
-            fullWidth
-            color="primary"
-            variant="ghost"
-            onPress={handleCancelModify}
-          >
+          <Button fullWidth color="primary" variant="ghost" onPress={handleCancelModify}>
             Cancel
           </Button>
         </div>

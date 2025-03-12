@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Kanit } from 'next/font/google';
 import AuthGuestGuard from '@/contexts/AuthGuestGuard';
 import TanstackProvider from '@/contexts/TanstackProvider';
 import Providers from '@/contexts/ToastProvider';
+import Loading from '@/components/nextui/Loading/Loading';
 import '@/styles/globals.scss';
 
 const kanitFont = Kanit({
@@ -25,9 +27,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={kanitFont.className}>
         <TanstackProvider>
-          <AuthGuestGuard>
-            <Providers>{children}</Providers>
-          </AuthGuestGuard>
+          <Suspense fallback={<Loading />}>
+            <AuthGuestGuard>
+              <Providers>{children}</Providers>
+            </AuthGuestGuard>
+          </Suspense>
         </TanstackProvider>
       </body>
     </html>

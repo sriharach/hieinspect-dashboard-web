@@ -18,7 +18,8 @@ export interface IreponseDataManageUser extends Omit<IManageUserDataSoure, 'role
 
 export interface RequestManageUser {
   id?: string
-  user_name: string,
-  password: string
-  role_id: string
+  user_name?: string,
+  password?: string
+  first_name?: string
+  role_id?: string
 }

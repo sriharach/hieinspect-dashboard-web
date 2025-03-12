@@ -1,3 +1,4 @@
+import ButtonEditRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonEditRow';
 import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
 import { ColumnsType } from '@/components/nextui/Tables/type';
 import useManageHouseCategoriesRemove from '@/hooks/useMutation/useManageHouseCategoriesRemove';
@@ -29,6 +30,7 @@ const useManageHouseCategories = () => {
       render: (data) => {
         return (
           <div className="flex items-center gap-4">
+            <ButtonEditRow row_id={data.id!} path="manage-house-categories" />
             <ButtonRemoveRow
               onPress={() => {
                 mutate(data.id, {

@@ -7,7 +7,7 @@ import React from 'react';
 import useManageRealtys from './controllers/useManageRealtys';
 
 const ManageRealty = () => {
-  const { columns, dataSource, onManageAddRealtys } = useManageRealtys();
+  const { columns, dataSource, isLoading, onManageAddRealtys } = useManageRealtys();
   return (
     <Layout>
       <div className="flex flex-1 justify-between">
@@ -16,7 +16,7 @@ const ManageRealty = () => {
           + Add Realty
         </Button>
       </div>
-      <Table isHeaderSticky columns={columns} dataSource={dataSource} pagination paginationTotal={1} />
+      <Table isHeaderSticky columns={columns} dataSource={dataSource} isLoading={isLoading} />
     </Layout>
   );
 };

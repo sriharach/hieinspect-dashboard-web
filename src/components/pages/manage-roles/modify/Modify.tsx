@@ -12,28 +12,26 @@ import styles from './modify.module.scss';
 import useModifyRole from '../controllers/useModifyRole';
 
 const Modify = () => {
-  const { errorMessage, handleCancelModify, handleSubmitForm, setRole } =
-    useModifyRole();
+  const { errors, handleCancelModify, handleSubmitForm, Controller, control } = useModifyRole();
 
   return (
     <Layout>
-      <form className={styles['modify-content']}>
-        <Input
-          errorMessage={errorMessage}
-          isInvalid={!!errorMessage}
-          label="Role"
-          onChange={(e) => setRole(e.target.value)}
+      <form className={styles['modify-content']} onSubmit={handleSubmitForm}>
+        <Controller
+          control={control}
+          name="name"
+          render={({ field }) => {
+            return (
+              <Input {...field} errorMessage={errors.name?.message} isInvalid={!!errors.name?.message} label="Role" />
+            );
+          }}
         />
+
         <div className={styles['modify-content-button']}>
-          <Button fullWidth color="primary" onPress={handleSubmitForm}>
+          <Button fullWidth color="primary" type="submit">
             Submit
           </Button>
-          <Button
-            fullWidth
-            color="primary"
-            variant="ghost"
-            onPress={handleCancelModify}
-          >
+          <Button fullWidth color="primary" variant="ghost" onPress={handleCancelModify}>
             Cancel
           </Button>
         </div>

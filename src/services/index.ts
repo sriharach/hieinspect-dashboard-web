@@ -31,8 +31,20 @@ export const GET_USER_SERVICE = async (query: OptionQuery) => {
   return response;
 };
 
+export const GET_ONCE_USER_SERVICE = async (payload: RequestManageUser['id']) => {
+  const response = await axiosConfig.get<IresponseCommon<IreponseDataManageUser>>(
+    commonPayloadQuery(`${serviceConfig.USER_MANAGE}/${payload}`),
+  );
+  return response.data;
+};
+
 export const POST_USER_SERVICE = async (payload: RequestManageUser) => {
   const response = await axiosConfig.post(serviceConfig.USER_MANAGE, payload);
+  return response.data;
+};
+
+export const PUT_USER_SERVICE = async (payload: RequestManageUser) => {
+  const response = await axiosConfig.put(`${serviceConfig.USER_MANAGE}/${payload.id}`, payload);
   return response.data;
 };
 
@@ -47,10 +59,13 @@ export const GET_ROLE_SERVICE = async () => {
   return response.data;
 };
 
-export const POST_ROLE_SERVICE = async (payload: IManageRoles['name']) => {
-  const response = await axiosConfig.post(serviceConfig.ROLE_MANAGE, {
-    name: payload,
-  });
+export const GET_ONCE_ROLE_SERVICE = async (payload: IManageRoles['id']) => {
+  const response = await axiosConfig.get<IresponseCommon<IManageRoles>>(`${serviceConfig.ROLE_MANAGE}/${payload}`);
+  return response.data;
+};
+
+export const POST_ROLE_SERVICE = async (payload: IManageRoles) => {
+  const response = await axiosConfig.post(serviceConfig.ROLE_MANAGE, payload);
   return response.data;
 };
 
@@ -67,8 +82,20 @@ export const GET_CATEGORIES_SERVICE = async (query?: OptionQuery) => {
   return response.data;
 };
 
+export const GET_ONCE_CATEGORIES_SERVICE = async (payload: RequestManageHouseCategories['id']) => {
+  const response = await axiosConfig.get<IresponseCommon<IManageHouseCategories>>(
+    commonPayloadQuery(`${serviceConfig.CATEGORIES_MANAGE}/${payload}`),
+  );
+  return response.data;
+};
+
 export const POST_CATEGORIES_SERVICE = async (payload: RequestManageHouseCategories['name']) => {
   const response = await axiosConfig.post(commonPayloadQuery(serviceConfig.CATEGORIES_MANAGE), { name: payload });
+  return response.data;
+};
+
+export const PUT_CATEGORIES_SERVICE = async (payload: RequestManageHouseCategories) => {
+  const response = await axiosConfig.put(commonPayloadQuery(`${serviceConfig.CATEGORIES_MANAGE}/${payload.id}`), payload);
   return response.data;
 };
 
@@ -85,8 +112,20 @@ export const GET_REALTYS_SERVICE = async (query?: OptionQuery) => {
   return response.data;
 };
 
+export const GET_ONCE_REALTYS_SERVICE = async (payload: RequestManageRealtys['id']) => {
+  const response = await axiosConfig.get<IresponseCommon<IManageRealtys>>(
+    commonPayloadQuery(`${serviceConfig.REALTY_MANAGE}/${payload}`),
+  );
+  return response.data;
+};
+
 export const POST_REALTYS_SERVICE = async (payload: RequestManageRealtys['name']) => {
   const response = await axiosConfig.post(commonPayloadQuery(serviceConfig.REALTY_MANAGE), { name: payload });
+  return response.data;
+};
+
+export const PUT_REALTYS_SERVICE = async (payload: RequestManageRealtys) => {
+  const response = await axiosConfig.put(commonPayloadQuery(`${serviceConfig.REALTY_MANAGE}/${payload.id}`), payload);
   return response.data;
 };
 

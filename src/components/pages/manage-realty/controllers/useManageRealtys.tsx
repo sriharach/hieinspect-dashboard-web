@@ -13,6 +13,7 @@ import useManageRealtysRemove from '@/hooks/useMutation/useManageRealtysRemove';
 import useRealtys from '@/hooks/useQuery/useRealtys';
 
 import { IManageRealtys } from '@/types/models/manageRealtys';
+import ButtonEditRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonEditRow';
 
 const useManageRealtys = () => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const useManageRealtys = () => {
       render: (data) => {
         return (
           <div className="flex items-center gap-4">
+            <ButtonEditRow row_id={data.id!} path="manage-realty" />
             <ButtonRemoveRow
               onPress={() => {
                 mutate(data.id, {
@@ -113,7 +115,7 @@ const useManageRealtys = () => {
   const handleAddRealtys = () => {
     router.push('/manage-realty/modify');
   };
-  return { columns, dataSource, isLoading: isLoading, isFetching, onManageAddRealtys: handleAddRealtys };
+  return { columns, dataSource, isLoading: isLoading || isFetching, onManageAddRealtys: handleAddRealtys };
 };
 
 export default useManageRealtys;

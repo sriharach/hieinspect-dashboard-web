@@ -1,3 +1,4 @@
+import ButtonEditRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonEditRow';
 import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
 import { ColumnsType } from '@/components/nextui/Tables/type';
 import useManageRoleRemove from '@/hooks/useMutation/useManageRoleRemove';
@@ -35,11 +36,7 @@ const useManageRoles = () => {
       render: (data) => {
         return (
           <div className="flex items-center gap-4">
-            {/* <Tooltip content="Edit user">
-              <button className="text-[#979797]">
-                <HeroPencilIcon width={20} />
-              </button>
-            </Tooltip> */}
+            <ButtonEditRow row_id={data.id!} path='manage-role' />
             <ButtonRemoveRow
               onPress={() => {
                 mutate(data.id, {
@@ -64,7 +61,7 @@ const useManageRoles = () => {
       return data.data.map((item) => ({
         id: item.id,
         name: item.name,
-        created_date: new Date(item.created_date).toLocaleString('th-TH'),
+        created_date: item.created_date,
         created_by: item.created_by,
       }));
     }

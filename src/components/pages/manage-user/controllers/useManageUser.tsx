@@ -1,17 +1,11 @@
+import ButtonEditRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonEditRow';
 import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
 import { ColumnsType } from '@/components/nextui/Tables/type';
 import useManageUserRemove from '@/hooks/useMutation/useManageUserRemove';
 import useManageUserService from '@/hooks/useQuery/useManageUser';
 import { useAuth } from '@/store/userAuth';
 import { IManageUserDataSoure } from '@/types/models/manageUser';
-import {
-  Button,
-  Chip,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  addToast,
-} from '@heroui/react';
+import { Chip, addToast } from '@heroui/react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -56,10 +50,10 @@ const useManageUser = () => {
       key: 'role',
       title: 'Role',
     },
-    // {
-    //   key: 'first_name',
-    //   title: 'Firstname',
-    // },
+    {
+      key: 'first_name',
+      title: 'Name',
+    },
     {
       key: 'is_active',
       title: 'Active',
@@ -86,20 +80,7 @@ const useManageUser = () => {
       render: (data) => {
         return (
           <div className="flex items-center gap-4">
-            {/* <div>
-              <Tooltip content="Details">
-                <button className="text-[#979797]">
-                  <HeroEyeIcon width={20} />
-                </button>
-              </Tooltip>
-            </div>
-            <div>
-              <Tooltip content="Edit user">
-                <button className="text-[#979797]">
-                  <HeroPencilIcon width={20} />
-                </button>
-              </Tooltip>
-            </div> */}
+            <ButtonEditRow row_id={data.id} path='manage-user' />
             {user?.id != data.id && (
               <ButtonRemoveRow
                 onPress={() => {
