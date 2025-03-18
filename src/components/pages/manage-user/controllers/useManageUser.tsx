@@ -29,7 +29,7 @@ const useManageUser = () => {
 
   const dataSource: IManageUserDataSoure[] = useMemo(() => {
     if (data) {
-      return data.data.data.data.map((item) => ({
+      return data.data.data.map((item) => ({
         id: item.id,
         user_name: item.user_name,
         first_name: item.first_name,
@@ -108,7 +108,7 @@ const useManageUser = () => {
     dataSource,
     coloums,
     paginationPage: page,
-    paginationTotal: data?.data.data.meta.totalPages,
+    paginationTotal: data?.data.meta.totalPages,
     isLoading: isLoading || isFetching,
     onManageAddUser: handleAddUser,
     onChangePage: (page: number) => setPage(page),

@@ -4,6 +4,7 @@
 import React from 'react';
 import { Avatar, Navbar, NavbarContent, NavbarItem } from '@heroui/react';
 import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem } from '@heroui/dropdown';
+import clsx from 'clsx';
 
 import styles from './navbarWrapper.module.scss';
 
@@ -12,7 +13,7 @@ import { NavbarWrapperProps } from './type';
 import { HeroMenuNavIcon } from '@/components/assets/icons/hero';
 import { useAuth } from '@/store/userAuth';
 
-const NavbarWrapper = ({ setCollapsed }: NavbarWrapperProps) => {
+const NavbarWrapper = ({ setCollapsed, collapsed }: NavbarWrapperProps) => {
   const { signOut, user } = useAuth();
 
   const handleLogout = () => signOut();
@@ -26,7 +27,11 @@ const NavbarWrapper = ({ setCollapsed }: NavbarWrapperProps) => {
           wrapper: 'w-full max-w-full',
         }}
       >
-        <NavbarContent className="inline-flex md:hidden items-center">
+        <NavbarContent
+          className={clsx('inline-flex md:hidden items-center', {
+            ' ml-[16rem]': collapsed,
+          })}
+        >
           <HeroMenuNavIcon role="button" onClick={() => setCollapsed((prev) => !prev)} />
         </NavbarContent>
         <NavbarContent justify="end">

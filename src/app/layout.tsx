@@ -26,13 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={kanitFont.className}>
-        <TanstackProvider>
-          <Suspense fallback={<Loading />}>
-            <AuthGuestGuard>
-              <Providers>{children}</Providers>
-            </AuthGuestGuard>
-          </Suspense>
-        </TanstackProvider>
+        <Providers>
+          <TanstackProvider>
+            <Suspense fallback={<Loading />}>
+              <AuthGuestGuard>{children}</AuthGuestGuard>
+            </Suspense>
+          </TanstackProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -7,6 +7,7 @@ import { OptionQuery } from '@/types/common/queryCommon';
 import { IManageRoles } from '@/types/models/manageRoles';
 import { IManageHouseCategories, RequestManageHouseCategories } from '@/types/models/manageHouseCategories';
 import { IManageRealtys, RequestManageRealtys } from '@/types/models/manageRealtys';
+import { IManageHouse } from '@/types/models/manageHouse';
 
 function commonPayloadQuery(url: string, query?: OptionQuery) {
   const newQuery = new URL(url);
@@ -28,7 +29,7 @@ export const GET_USER_SERVICE = async (query: OptionQuery) => {
   const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IreponseDataManageUser[]>>>(
     commonPayloadQuery(serviceConfig.USER_MANAGE, query),
   );
-  return response;
+  return response.data;
 };
 
 export const GET_ONCE_USER_SERVICE = async (payload: RequestManageUser['id']) => {
@@ -133,3 +134,8 @@ export const DELETE_REALTYS_SERVICE = async (payload: RequestManageRealtys['id']
   const response = await axiosConfig.delete(`${serviceConfig.REALTY_MANAGE}/${payload}`);
   return response.data;
 };
+
+export const GET_HOUSE_MANAGE_SERIVCE = async (query?: OptionQuery) => {
+  const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IManageHouse[]>>>(commonPayloadQuery(serviceConfig.HOUSE_MANAGE, query));
+  return response.data;
+}
