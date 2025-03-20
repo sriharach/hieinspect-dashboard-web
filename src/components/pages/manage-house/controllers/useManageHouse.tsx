@@ -11,8 +11,8 @@ import ButtonEditRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonEditRo
 
 // hook
 import useManageHouseService from '@/hooks/useQuery/useManageHouse';
+import useManageHouseRemove from '@/hooks/useMutation/useManageHouseRemove';
 
-import { IManageRealtys } from '@/types/models/manageRealtys';
 import { IManageHouse } from '@/types/models/manageHouse';
 
 const useManageHouse = () => {
@@ -22,15 +22,22 @@ const useManageHouse = () => {
   const { data, isLoading, isFetching, refetch } = useManageHouseService({
     limit: 10,
   });
+  const { mutate } = useManageHouseRemove();
 
   const columns: ColumnsType<IManageHouse> = [
     {
       key: 'realty',
       title: 'Realty',
+      render: (data) => data.realty?.name,
+    },
+    {
+      key: 'category_house',
+      title: 'Category house',
+      render: (data) => data.category_house?.name,
     },
     {
       key: 'name',
-      title: 'Name',
+      title: 'House name',
     },
     {
       key: 'created_date',
@@ -44,8 +51,20 @@ const useManageHouse = () => {
       render: (data) => {
         return (
           <div className="flex Fitems-center gap-4">
-            <ButtonEditRow row_id={data.id!} path="manage-realty" />
-            <ButtonRemoveRow onPress={() => {}} />
+            <ButtonEditRow row_id={data.id!} path="manage-house" />
+            <ButtonRemoveRow
+              onPress={() => {
+                mutate(data.id, {
+                  onSuccess: () => {
+                    addToast({
+                      color: 'success',
+                      title: 'House Deleted',
+                    });
+                    refetch();
+                  },
+                });
+              }}
+            />
           </div>
         );
       },
@@ -58,6 +77,13 @@ const useManageHouse = () => {
         return {
           id: item.id,
           name: item.name,
+          created_date: item.created_date,
+          realty: {
+            name: item.realty ? item.realty.name : '-',
+          },
+          category_house: {
+            name: item.category_house ? item.category_house.name : '-',
+          },
         };
       });
     }

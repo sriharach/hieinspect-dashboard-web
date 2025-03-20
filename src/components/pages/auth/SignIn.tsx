@@ -4,7 +4,7 @@
 import AuthLayout from '@/components/modules/layouts/AuthLayout';
 
 // libs
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Input, Button, addToast } from '@heroui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import { RequestSignIn } from '@/types/models/signIn';
 import useAuthSignIn from '@/hooks/useMutation/useAuthSignIn';
 import { useAuth } from '@/store/userAuth';
 import { AxiosError } from 'axios';
+import Loading from '@/components/nextui/Loading/Loading';
 
 const SignIn = () => {
   // router
@@ -51,6 +52,8 @@ const SignIn = () => {
   // useEffect(() => {
   //   if (isAuthenticated) router.push('/dashboard');
   // }, [isAuthenticated]);
+
+  if (isAuthenticated) return <Loading />;
 
   return (
     <AuthLayout>

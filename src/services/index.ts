@@ -7,7 +7,8 @@ import { OptionQuery } from '@/types/common/queryCommon';
 import { IManageRoles } from '@/types/models/manageRoles';
 import { IManageHouseCategories, RequestManageHouseCategories } from '@/types/models/manageHouseCategories';
 import { IManageRealtys, RequestManageRealtys } from '@/types/models/manageRealtys';
-import { IManageHouse } from '@/types/models/manageHouse';
+import { IManageHouse, RequestManageHouse, ResponseManageHouse } from '@/types/models/manageHouse';
+import { RequestUploadPath, ResponseUploadPath } from '@/types/models/upload';
 
 function commonPayloadQuery(url: string, query?: OptionQuery) {
   const newQuery = new URL(url);
@@ -96,7 +97,10 @@ export const POST_CATEGORIES_SERVICE = async (payload: RequestManageHouseCategor
 };
 
 export const PUT_CATEGORIES_SERVICE = async (payload: RequestManageHouseCategories) => {
-  const response = await axiosConfig.put(commonPayloadQuery(`${serviceConfig.CATEGORIES_MANAGE}/${payload.id}`), payload);
+  const response = await axiosConfig.put(
+    commonPayloadQuery(`${serviceConfig.CATEGORIES_MANAGE}/${payload.id}`),
+    payload,
+  );
   return response.data;
 };
 
@@ -135,7 +139,37 @@ export const DELETE_REALTYS_SERVICE = async (payload: RequestManageRealtys['id']
   return response.data;
 };
 
+// house
 export const GET_HOUSE_MANAGE_SERIVCE = async (query?: OptionQuery) => {
-  const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IManageHouse[]>>>(commonPayloadQuery(serviceConfig.HOUSE_MANAGE, query));
+  const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IManageHouse[]>>>(
+    commonPayloadQuery(serviceConfig.HOUSE_MANAGE, query),
+  );
   return response.data;
-}
+};
+export const GET_ONCE_HOUSE_MANAGE_SERIVCE = async (payload: RequestManageHouse['id']) => {
+  const response = await axiosConfig.get<IresponseCommon<IManageHouse>>(`${serviceConfig.HOUSE_MANAGE}/${payload}`);
+  return response.data;
+};
+
+export const POST_HOUSE_SERVICE = async (payload: RequestManageHouse) => {
+  const response = await axiosConfig.post<IresponseCommon<ResponseManageHouse>>(serviceConfig.HOUSE_MANAGE, payload);
+  return response.data;
+};
+
+export const PUT_HOUSE_SERVICE = async (payload: RequestManageHouse) => {
+  const response = await axiosConfig.put<IresponseCommon<ResponseManageHouse>>(
+    `${serviceConfig.HOUSE_MANAGE}/${payload.id}`,
+    payload,
+  );
+  return response.data;
+};
+export const DELETE_HOUSE_SERVICE = async (payload: RequestManageHouse['id']) => {
+  const response = await axiosConfig.delete(`${serviceConfig.HOUSE_MANAGE}/${payload}`);
+  return response.data;
+};
+
+// upload
+export const POST_UPLOAD_SERVICE = async (payload: RequestUploadPath) => {
+  const response = await axiosConfig.postForm<IresponseCommon<ResponseUploadPath>>(serviceConfig.UPLOAD_PATH, payload);
+  return response.data;
+};

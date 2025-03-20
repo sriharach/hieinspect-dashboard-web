@@ -3,9 +3,10 @@ import type { Metadata } from 'next';
 import { Kanit } from 'next/font/google';
 import AuthGuestGuard from '@/contexts/AuthGuestGuard';
 import TanstackProvider from '@/contexts/TanstackProvider';
-import Providers from '@/contexts/ToastProvider';
+import ToastProviders from '@/contexts/ToastProvider';
 import Loading from '@/components/nextui/Loading/Loading';
 import '@/styles/globals.scss';
+import AuthProvider from '@/contexts/AuthProvider';
 
 const kanitFont = Kanit({
   subsets: ['latin', 'thai'],
@@ -26,13 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={kanitFont.className}>
-        <Providers>
+        <ToastProviders>
           <TanstackProvider>
             <Suspense fallback={<Loading />}>
-              <AuthGuestGuard>{children}</AuthGuestGuard>
+              <AuthProvider>
+                <AuthGuestGuard>{children}</AuthGuestGuard>
+              </AuthProvider>
             </Suspense>
           </TanstackProvider>
-        </Providers>
+        </ToastProviders>
       </body>
     </html>
   );

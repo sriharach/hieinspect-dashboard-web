@@ -3,6 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   env: {
     API_URL: process.env.API_URL,
+    AMOUNT_LIMIT_IMAGE: process.env.AMOUNT_LIMIT_IMAGE
   },
   output: 'export',
   images: {

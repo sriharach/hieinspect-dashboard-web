@@ -10,11 +10,16 @@ interface ButtonEditRowProps {
 const ButtonEditRow = ({ row_id, path }: ButtonEditRowProps) => {
   const router = useRouter();
 
-  const newParams = new URLSearchParams(window.location.search);
-  newParams.set('id', encodeURIComponent(row_id));
+  const newParams = new URLSearchParams();
+  newParams.set('id', row_id);
 
   return (
-    <button className="text-[#979797]" onClick={() => router.push(`/${path}/modify?${newParams}`)}>
+    <button
+      className="text-[#979797]"
+      onClick={() => {
+        router.push(`/${path}/modify?${encodeURIComponent(newParams.toString())}`);
+      }}
+    >
       <HeroPencilIcon width={20} />
     </button>
   );

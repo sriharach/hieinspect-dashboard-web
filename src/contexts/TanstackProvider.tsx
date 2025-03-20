@@ -22,7 +22,6 @@ const TanstackProvider = ({ children }: TanstackProviderProps) => {
       mutations: {
         onError: (err) => {
           if (err instanceof AxiosError) {
-            console.log('err.request.status :>> ', err.request.status);
             switch (err.request.status) {
               case 401:
                 addToast({
@@ -38,7 +37,6 @@ const TanstackProvider = ({ children }: TanstackProviderProps) => {
                 });
                 break;
 
-              default:
               case 500:
                 addToast({
                   color: 'danger',

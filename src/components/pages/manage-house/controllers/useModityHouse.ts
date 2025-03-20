@@ -1,14 +1,15 @@
 // libs
 import useModifyEdit from '@/hooks/useModifyEdit';
-import useManageOnceRealtys from '@/hooks/useMutation/useManageOnceRealtys';
-import useManageRealtys from '@/hooks/useMutation/useManageRealtys';
-import useManageUpdateRealtys from '@/hooks/useMutation/useManageUpdateRealtys';
+import useManageHouse from '@/hooks/useMutation/useManageHouse';
+import useManageOnceHouse from '@/hooks/useMutation/useManageOnceHouse';
+import useManageUpdateHouse from '@/hooks/useMutation/useManageUpdateHouse';
+import useUpload from '@/hooks/useMutation/useUpload';
 import useManageCategories from '@/hooks/useQuery/useManageCategories';
 import useRealtys from '@/hooks/useQuery/useRealtys';
 import { RequestManageHouse } from '@/types/models/manageHouse';
 import { addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 const useModityRealty = () => {
@@ -17,13 +18,20 @@ const useModityRealty = () => {
   // state
   const inputUploadRef = useRef<HTMLInputElement | null>(null);
 
-  const [imageSrcs, setImageSrcs] = useState<string[]>([]);
-  console.log('imageSrcs :>> ', imageSrcs);
+  const [imageSrcs, setImageSrcs] = useState<
+    {
+      base64?: string;
+      file: File;
+      fileName?: string;
+    }[]
+  >([]);
+  const [excludeFilename, setExcludeFilename] = useState<string[]>([]);
 
   // hooks
-  const { mutate: mutatePost, isPending: isPendingPost } = useManageRealtys();
-  const { mutate: mutateUpdate, isPending: isPendingUpdate } = useManageUpdateRealtys();
-  const { userModify, passOfEdit } = useModifyEdit({ serviceMutateFn: useManageOnceRealtys });
+  const { mutateAsync: mutatePost, isPending: isPendingPost } = useManageHouse();
+  const { mutateAsync: mutateHousePut, isPending: isPendingHousePut } = useManageUpdateHouse();
+  const { mutateAsync: mutatePostUpload, isPending: isPendingPostUpload } = useUpload();
+  const { userModify, passOfEdit } = useModifyEdit({ serviceMutateFn: useManageOnceHouse });
   const { data: categoriesData } = useManageCategories();
   const { data: realitysData } = useRealtys();
 
@@ -31,31 +39,72 @@ const useModityRealty = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<RequestManageHouse>();
+  } = useForm<RequestManageHouse>({
+    values: {
+      name: userModify?.name,
+      category_house_id: userModify?.category_house_id,
+      realitys_id: userModify?.realitys_id,
+    },
+  });
 
   const handleCancelModify = () => {
     router.back();
   };
 
-  const handleSubmitForm = handleSubmit((data) => {
-    // if (passOfEdit) {
-    //   mutateUpdate(
-    //     { id: userModify?.id, name: data.name },
-    //     {
-    //       onSuccess: () => {
-    //         addToast({ color: 'success', title: 'Realty edited success' });
-    //         router.back();
-    //       },
-    //     },
-    //   );
-    // } else {
-    //   mutatePost(data.name, {
-    //     onSuccess: () => {
-    //       addToast({ color: 'success', title: 'Realty added success' });
-    //       router.back();
-    //     },
-    //   });
-    // }
+  const handleSubmitForm = handleSubmit(async (data) => {
+    if (passOfEdit) {
+      let uploaded = undefined;
+
+      // หาไฟล์ภาพทำการอัพโหลดอีกรอบ
+      if (imageSrcs.length > 0) {
+        // call save image
+        uploaded = await Promise.all(
+          imageSrcs
+            .filter((x) => x.file)
+            .map(async (ifm) => (await mutatePostUpload({ code_house: userModify!.code_house!, file: ifm.file })).data),
+        );
+      }
+
+      const model: any = {
+        ...data,
+        id: userModify?.id,
+        exclude_filename: excludeFilename,
+        code_house: userModify?.code_house,
+        house_images_upload: uploaded || [],
+      };
+
+      // update file path in to api
+      await mutateHousePut(model, {
+        onSuccess: () => {
+          addToast({ title: 'Uploaded success', color: 'success' });
+          router.push('/manage-house');
+        },
+      });
+    } else {
+      const response = await mutatePost({ ...data, house_images_upload: [] });
+      if (response.data.code_house) {
+        if (imageSrcs.length > 0) {
+          // call save image
+          const uploaded = await Promise.all(
+            imageSrcs.map(
+              async (ifm) => (await mutatePostUpload({ code_house: response.data.code_house, file: ifm.file })).data,
+            ),
+          );
+
+          // update file path in to api
+          await mutateHousePut(
+            { id: response.data.id, house_images_upload: uploaded },
+            {
+              onSuccess: () => {
+                addToast({ title: 'Uploaded success', color: 'success' });
+                router.push('/manage-house');
+              },
+            },
+          );
+        }
+      }
+      router.push('/manage-house');
+    }
   });
 
   const handleUploadFile = () => {
@@ -67,19 +116,21 @@ const useModityRealty = () => {
       const files = event.target.files;
 
       for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImageSrcs((prevImageSrcs) => [...prevImageSrcs, reader.result as string]);
+          setImageSrcs((prevImageSrcs) => [...prevImageSrcs, { file, base64: reader.result as string }]);
         };
-        reader.readAsDataURL(files[i]);
+        reader.readAsDataURL(file);
       }
 
       event.target.value = ''; // reset file
     }
   };
 
-  const handleRemoveFile = (index: number) => {
+  const handleRemoveFile = (index: number, fileName?: string) => {
     setImageSrcs((prevImageSrcs) => prevImageSrcs.filter((_, i) => i !== index));
+    setExcludeFilename((prev) => [...prev, fileName!]);
   };
 
   const categories = useMemo(() => {
@@ -102,10 +153,24 @@ const useModityRealty = () => {
     return [];
   }, [realitysData]);
 
+  useEffect(() => {
+    if (userModify) {
+      setImageSrcs(
+        userModify.house_images?.map((val) => {
+          return {
+            base64: val.image,
+            fileName: val.file_name,
+            file: undefined,
+          };
+        }) as any,
+      );
+    }
+  }, [userModify]);
+
   return {
     categories,
     realitys,
-    isLoading: isPendingPost || isPendingUpdate,
+    isLoading: isPendingPost || isPendingHousePut || isPendingPostUpload,
     errors,
     control,
     inputUploadRef,
@@ -115,7 +180,7 @@ const useModityRealty = () => {
     handleSubmitForm,
     onUploadFile: handleUploadFile,
     onChanageFile: handleChangeFile,
-    onRemoveFile: handleRemoveFile
+    onRemoveFile: handleRemoveFile,
   };
 };
 

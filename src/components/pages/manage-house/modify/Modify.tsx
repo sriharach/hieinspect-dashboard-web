@@ -37,7 +37,7 @@ const Modify = () => {
           name="category_house_id"
           render={({ field }) => {
             return (
-              <Select {...field} label="Select category house (optional)" selectedKeys={[field.value ?? 'all']}>
+              <Select {...field} label="Select category house (optional)" selectedKeys={[field.value as string]}>
                 {categories.map((category) => (
                   <SelectItem color="primary" key={category.id}>
                     {category.name}
@@ -52,7 +52,7 @@ const Modify = () => {
           name="realitys_id"
           render={({ field }) => {
             return (
-              <Select {...field} label="Select reality house (optional)" selectedKeys={[field.value ?? 'all']}>
+              <Select {...field} label="Select reality house (optional)" selectedKeys={[field.value as string]}>
                 {realitys.map((reality) => (
                   <SelectItem color="primary" key={reality.id}>
                     {reality.name}
@@ -87,8 +87,7 @@ const Modify = () => {
                   style={{
                     width: '140px',
                     height: '140px',
-                    backgroundImage: `url("${src}")`,
-                    // backgroundRepeat: 'no-repeat',
+                    backgroundImage: `url("${src.base64}")`,
                     backgroundSize: 'cover',
                   }}
                 >
@@ -96,7 +95,7 @@ const Modify = () => {
                     width={25}
                     role="button"
                     className="absolute bottom-1 right-1 text-red-600"
-                    onClick={() => onRemoveFile(index)}
+                    onClick={() => onRemoveFile(index, src.fileName)}
                   />
                 </div>
               );
@@ -104,7 +103,7 @@ const Modify = () => {
           </div>
         )}
 
-        {imageSrcs.length >= 15 ? null : (
+        {imageSrcs.length >= Number(process.env.AMOUNT_LIMIT_IMAGE) ? null : (
           <div
             className="border border-gray-300 rounded-2xl p-4 text-center max-w-[120px] cursor-pointer"
             onClick={onUploadFile}
@@ -112,22 +111,14 @@ const Modify = () => {
             <strong className="text-sm">Upload</strong>
           </div>
         )}
-        <input multiple hidden ref={inputUploadRef} type="file" onChange={onChanageFile} />
+        <div className="grid space-y-1">
+          <span className="text-sm text-red-600">** รูปภาพขนาดไม่เกิน 15mb **</span>
+          <span className="text-sm">
+            จำนวนรูปภาพที่อัพโหลดได้ {Number(process.env.AMOUNT_LIMIT_IMAGE) - imageSrcs.length}
+          </span>
+        </div>
+        <input id="input-upload" multiple hidden ref={inputUploadRef} type="file" onChange={onChanageFile} />
 
-        {/* <Controller
-          control={control}
-          name="name"
-          render={({ field }) => {
-            return (
-              <Input
-                {...field}
-                label="House name"
-                errorMessage={errors.name?.message}
-                isInvalid={!!errors.name?.message}
-              />
-            );
-          }}
-        /> */}
         <div className={styles['modify-content-button']}>
           <Button fullWidth color="primary" isLoading={isLoading} type="submit">
             Submit

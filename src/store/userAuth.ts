@@ -8,6 +8,7 @@ import { AxiosError } from 'axios';
 export interface useAuthProps {
   user: IDecodePayload | undefined;
   isAuthenticated: boolean;
+  initialized: boolean
   authenticate: (accessToken: string) => void;
   initialize: () => void;
   signOut: () => void;
@@ -32,25 +33,28 @@ export const useAuth = create<useAuthProps>((set, get) => {
 
       // await GET_USER_SERVICE()
       const decode = jwtDecode<IDecodePayload>(accessToken);
-      set(() => ({ isAuthenticated: true, user: decode }));
+      set(() => ({ isAuthenticated: true, initialized: true, user: decode }));
     }
   };
   const initialize = () => {
     const clientToken = Cookie.get('client-token');
     if (clientToken) {
       authenticate(clientToken);
-    } else set(() => ({ isAuthenticated: false, user: undefined }));
+    } else {
+      get().signOut()
+    }
   };
 
   const signOut = () => {
     Cookie.remove('client-token');
     // axiosConfig.interceptors.response.eject()
-    set(() => ({ isAuthenticated: false, user: undefined }));
+    set(() => ({ isAuthenticated: false, initialized: true, user: undefined }));
   };
 
   return {
     user: undefined,
     isAuthenticated: false,
+    initialized: false,
     authenticate,
     initialize,
     signOut,
