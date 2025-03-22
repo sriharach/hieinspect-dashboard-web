@@ -9,6 +9,7 @@ export interface IManageHouse {
   is_active?: boolean;
   created_date?: string;
   created_by?: string;
+  created_name?: string;
   updated_date?: string;
   updated_by?: string;
   code_house?: string;

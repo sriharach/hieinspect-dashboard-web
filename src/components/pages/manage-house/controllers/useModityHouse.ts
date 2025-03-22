@@ -4,7 +4,7 @@ import useManageHouse from '@/hooks/useMutation/useManageHouse';
 import useManageOnceHouse from '@/hooks/useMutation/useManageOnceHouse';
 import useManageUpdateHouse from '@/hooks/useMutation/useManageUpdateHouse';
 import useUpload from '@/hooks/useMutation/useUpload';
-import useManageCategories from '@/hooks/useQuery/useManageCategories';
+import useManageCategoriesAll from '@/hooks/useQuery/useManageCategoriesAll';
 import useRealtys from '@/hooks/useQuery/useRealtys';
 import { RequestManageHouse } from '@/types/models/manageHouse';
 import { addToast } from '@heroui/react';
@@ -32,7 +32,7 @@ const useModityRealty = () => {
   const { mutateAsync: mutateHousePut, isPending: isPendingHousePut } = useManageUpdateHouse();
   const { mutateAsync: mutatePostUpload, isPending: isPendingPostUpload } = useUpload();
   const { userModify, passOfEdit } = useModifyEdit({ serviceMutateFn: useManageOnceHouse });
-  const { data: categoriesData } = useManageCategories();
+  const { data: categoriesData } = useManageCategoriesAll();
   const { data: realitysData } = useRealtys();
 
   const {
@@ -96,8 +96,7 @@ const useModityRealty = () => {
             { id: response.data.id, house_images_upload: uploaded },
             {
               onSuccess: () => {
-                addToast({ title: 'Uploaded success', color: 'success' });
-                router.push('/manage-house');
+                addToast({ title: 'Add house success', color: 'success' });
               },
             },
           );
@@ -130,17 +129,14 @@ const useModityRealty = () => {
 
   const handleRemoveFile = (index: number, fileName?: string) => {
     setImageSrcs((prevImageSrcs) => prevImageSrcs.filter((_, i) => i !== index));
-    setExcludeFilename((prev) => [...prev, fileName!]);
+    if (fileName) {
+      setExcludeFilename((prev) => [...prev, fileName]);
+    }
+    
   };
 
   const categories = useMemo(() => {
-    if (categoriesData) {
-      return categoriesData.data.map((val) => ({
-        id: val.id,
-        name: val.name,
-      }));
-    }
-    return [];
+    return categoriesData ? categoriesData.data : [];
   }, [categoriesData]);
 
   const realitys = useMemo(() => {
@@ -155,15 +151,18 @@ const useModityRealty = () => {
 
   useEffect(() => {
     if (userModify) {
-      setImageSrcs(
-        userModify.house_images?.map((val) => {
-          return {
-            base64: val.image,
-            fileName: val.file_name,
-            file: undefined,
-          };
-        }) as any,
-      );
+      const previewImage = userModify.house_images?.find((x) => x.image);
+      if (previewImage) {
+        setImageSrcs(
+          userModify.house_images?.map((val) => {
+            return {
+              base64: val.image,
+              fileName: val.file_name,
+              file: undefined,
+            };
+          }) as any,
+        );
+      }
     }
   }, [userModify]);
 

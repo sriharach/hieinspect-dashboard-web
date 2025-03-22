@@ -2,7 +2,7 @@
 import { addToast } from '@heroui/react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // components
 import ButtonRemoveRow from '@/components/modules/ButtonRemoveRow.tsx/ButtonRemoveRow';
@@ -18,9 +18,16 @@ import { IManageHouse } from '@/types/models/manageHouse';
 const useManageHouse = () => {
   const router = useRouter();
 
+  // state
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [search, setSearch] = useState('');
+
   // hooks
   const { data, isLoading, isFetching, refetch } = useManageHouseService({
-    limit: 10,
+    limit,
+    page,
+    search,
   });
   const { mutate } = useManageHouseRemove();
 
@@ -97,11 +104,11 @@ const useManageHouse = () => {
     columns,
     dataSource,
     isLoading: isLoading || isFetching,
-    paginationPage: 1,
+    paginationPage: page,
     paginationTotal: data?.data.meta.totalPages,
     onManageAddHouse: handleAddHouse,
-    onChangePage: () => {},
-    onPressSearchButton: () => {},
+    onChangePage: (page: number) => setPage(page),
+    onPressSearchButton: (search: string) => setSearch(search),
   };
 };
 

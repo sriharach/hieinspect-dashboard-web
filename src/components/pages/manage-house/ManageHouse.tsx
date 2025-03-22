@@ -6,7 +6,15 @@ import React from 'react';
 import useManageHouse from './controllers/useManageHouse';
 
 const ManageHouse = () => {
-  const { dataSource, columns, isLoading, onChangePage, onPressSearchButton, onManageAddHouse } = useManageHouse();
+  const {
+    dataSource,
+    columns,
+    isLoading,
+    paginationTotal,
+    onChangePage,
+    onPressSearchButton,
+    onManageAddHouse,
+  } = useManageHouse();
   return (
     <Layout>
       <div className="flex flex-1 justify-between">
@@ -18,6 +26,7 @@ const ManageHouse = () => {
       <Table
         pagination
         serach
+        paginationTotal={paginationTotal}
         isLoading={isLoading}
         columns={columns}
         dataSource={dataSource}

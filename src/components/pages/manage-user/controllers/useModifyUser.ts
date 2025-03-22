@@ -42,19 +42,12 @@ const useModifyUser = () => {
         },
       );
     } else {
-      mutatePost(
-        {
-          user_name: data.user_name,
-          password: data.user_name,
-          first_name: data.first_name,
+      mutatePost(data, {
+        onSuccess: () => {
+          addToast({ color: 'success', title: 'User added success' });
+          router.back();
         },
-        {
-          onSuccess: () => {
-            addToast({ color: 'success', title: 'User added success' });
-            router.back();
-          },
-        },
-      );
+      });
     }
   });
 

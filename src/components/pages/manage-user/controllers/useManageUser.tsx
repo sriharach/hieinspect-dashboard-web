@@ -22,7 +22,6 @@ const useManageUser = () => {
     page,
     limit,
     search,
-    searchBy: ['user_name', 'first_name'],
   });
   const { mutate } = useManageUserRemove();
   const { user } = useAuth();
@@ -80,7 +79,7 @@ const useManageUser = () => {
       render: (data) => {
         return (
           <div className="flex items-center gap-4">
-            <ButtonEditRow row_id={data.id} path='manage-user' />
+            <ButtonEditRow row_id={data.id} path="manage-user" />
             {user?.id != data.id && (
               <ButtonRemoveRow
                 onPress={() => {

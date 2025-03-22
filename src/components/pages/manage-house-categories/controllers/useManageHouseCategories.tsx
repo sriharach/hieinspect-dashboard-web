@@ -7,13 +7,23 @@ import { IManageHouseCategories } from '@/types/models/manageHouseCategories';
 import { addToast } from '@heroui/react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const useManageHouseCategories = () => {
   const router = useRouter();
 
+
+  // state
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [search, setSearch] = useState('');
+
   // hook
-  const { data, isLoading, isFetching, refetch } = useManageCategories();
+  const { data, isLoading, isFetching, refetch } = useManageCategories({
+    limit,
+    page,
+    search
+  });
   const { mutate } = useManageHouseCategoriesRemove();
 
   const columns: ColumnsType<IManageHouseCategories> = [
@@ -52,7 +62,7 @@ const useManageHouseCategories = () => {
 
   const dataSource = useMemo<IManageHouseCategories[]>(() => {
     if (data) {
-      return data.data.map((item) => ({
+      return data.data.data.map((item) => ({
         id: item.id,
         name: item.name,
         created_date: dayjs(item.created_date).format('DD/MM/YYYY H:mm'),
@@ -63,14 +73,15 @@ const useManageHouseCategories = () => {
 
   return {
     isLoading: isLoading || isFetching,
-    paginationTotal: 0,
     columns,
     dataSource,
+    paginationPage: page,
+    paginationTotal: data?.data.meta.totalPages,
     onManageAddCategoreis: () => {
       router.push('/manage-house-categories/modify');
     },
-    onChangePage: () => {},
-    onPressSearchButton: () => {},
+    onChangePage: (page: number) => setPage(page),
+    onPressSearchButton: (search: string) => setSearch(search),
   };
 };
 

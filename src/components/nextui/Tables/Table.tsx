@@ -1,11 +1,6 @@
 // libs
 import React, { Key, useState } from 'react';
-import {
-  Table as TableHero,
-  TableHeader,
-  TableColumn,
-  TableBody,
-} from '@heroui/table';
+import { Table as TableHero, TableHeader, TableColumn, TableBody } from '@heroui/table';
 import { Pagination } from '@heroui/pagination';
 
 // types
@@ -36,8 +31,14 @@ const Table = <TData extends object>({
             size="sm"
             variant="bordered"
             label="Search..."
+            onKeyDown={(e) => {
+              if (e.key == 'Enter') {
+                props.onPressSearchButton?.(onSearch);
+              }
+            }}
             onChange={(e) => setOnsearch(e.target.value)}
           />
+
           <Button
             className="min-w-[50px]"
             color="primary"
@@ -82,8 +83,7 @@ const Table = <TData extends object>({
                 {columns.map((column) => {
                   return (
                     <TableCell key={`item-${column.key as Key}`}>
-                      {(column.render && column.render(item as never)) ||
-                        item[column.key as never]}
+                      {(column.render && column.render(item as never)) || item[column.key as never]}
                     </TableCell>
                   );
                 })}

@@ -83,14 +83,13 @@ const Modify = () => {
               return (
                 <div
                   key={index}
-                  className="shadow-md rounded-md relative"
-                  style={{
-                    width: '140px',
-                    height: '140px',
-                    backgroundImage: `url("${src.base64}")`,
-                    backgroundSize: 'cover',
-                  }}
+                  className="relative w-[140px] h-[140px]"
+                  // style={{
+                  //   backgroundImage: `url("${src.base64}")`,
+                  //   backgroundSize: 'cover',
+                  // }}
                 >
+                  <img src={src.base64} alt="preview" className="w-full h-full shadow-md rounded-md bg-cover" />
                   <HeroDeleteIcon
                     width={25}
                     role="button"
@@ -117,7 +116,7 @@ const Modify = () => {
             จำนวนรูปภาพที่อัพโหลดได้ {Number(process.env.AMOUNT_LIMIT_IMAGE) - imageSrcs.length}
           </span>
         </div>
-        <input id="input-upload" multiple hidden ref={inputUploadRef} type="file" onChange={onChanageFile} />
+        <input id="input-upload" multiple hidden ref={inputUploadRef} type="file" onChange={onChanageFile} accept='.jpeg,.png' />
 
         <div className={styles['modify-content-button']}>
           <Button fullWidth color="primary" isLoading={isLoading} type="submit">

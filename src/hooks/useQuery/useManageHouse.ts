@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const useManageHouseService = (query?: OptionQuery) => {
   return useQuery({
-    queryKey: [constatentKey.GET_HOUSE_MANAGE_KEY],
+    queryKey: [constatentKey.GET_HOUSE_MANAGE_KEY, query],
     queryFn: () => GET_HOUSE_MANAGE_SERIVCE(query),
   });
 };

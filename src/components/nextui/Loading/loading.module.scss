@@ -1,5 +1,5 @@
 .loading-page{
-    @apply bg-black/30 absolute h-full w-full z-[99];
+    @apply bg-white absolute h-full w-full z-[99];
 
     &-content{
         @apply m-auto flex justify-center items-center h-full;

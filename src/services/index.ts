@@ -78,9 +78,14 @@ export const DELETE_ROLE_SERVICE = async (payload: IManageRoles['id']) => {
 
 // categories
 export const GET_CATEGORIES_SERVICE = async (query?: OptionQuery) => {
-  const response = await axiosConfig.get<IresponseCommon<IManageHouseCategories[]>>(
+  const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IManageHouseCategories[]>>>(
     commonPayloadQuery(serviceConfig.CATEGORIES_MANAGE, query),
   );
+  return response.data;
+};
+
+export const GET_CATEGORIES_ALL_SERVICE = async () => {
+  const response = await axiosConfig.get<IresponseCommon<IManageHouseCategories[]>>(`${serviceConfig.CATEGORIES_MANAGE}/all`);
   return response.data;
 };
 
