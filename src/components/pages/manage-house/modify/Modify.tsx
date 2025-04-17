@@ -78,18 +78,18 @@ const Modify = () => {
           }}
         />
         {imageSrcs.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[120px]">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 min-h-[120px]">
             {imageSrcs.map((src, index) => {
               return (
                 <div
                   key={index}
-                  className="relative w-[140px] h-[140px]"
+                  className="relative w-32 h-32 md:w-[160px] md:h-[160px]"
                   // style={{
                   //   backgroundImage: `url("${src.base64}")`,
                   //   backgroundSize: 'cover',
                   // }}
                 >
-                  <img src={src.base64} alt="preview" className="w-full h-full shadow-md rounded-md bg-cover" />
+                  <img src={src.base64} alt="preview" className="w-full h-full shadow-md rounded-md object-cover" />
                   <HeroDeleteIcon
                     width={25}
                     role="button"
