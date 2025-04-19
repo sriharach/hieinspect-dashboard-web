@@ -116,9 +116,14 @@ export const DELETE_CATEGORIES_SERVICE = async (payload: RequestManageHouseCateg
 
 // realtys
 export const GET_REALTYS_SERVICE = async (query?: OptionQuery) => {
-  const response = await axiosConfig.get<IresponseCommon<IManageRealtys[]>>(
+  const response = await axiosConfig.get<IresponseCommon<IresponsePaginateCommon<IManageRealtys[]>>>(
     commonPayloadQuery(serviceConfig.REALTY_MANAGE, query),
   );
+  return response.data;
+};
+
+export const GET_REALTYS_ALL_SERVICE = async () => {
+  const response = await axiosConfig.get<IresponseCommon<IManageRealtys[]>>(`${serviceConfig.REALTY_MANAGE}/all`);
   return response.data;
 };
 

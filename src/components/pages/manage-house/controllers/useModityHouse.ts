@@ -5,7 +5,7 @@ import useManageOnceHouse from '@/hooks/useMutation/useManageOnceHouse';
 import useManageUpdateHouse from '@/hooks/useMutation/useManageUpdateHouse';
 import useUpload from '@/hooks/useMutation/useUpload';
 import useManageCategoriesAll from '@/hooks/useQuery/useManageCategoriesAll';
-import useRealtys from '@/hooks/useQuery/useRealtys';
+import useRealtysAll from '@/hooks/useQuery/useRealtysAll';
 import { RequestManageHouse } from '@/types/models/manageHouse';
 import { addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
@@ -33,7 +33,7 @@ const useModityRealty = () => {
   const { mutateAsync: mutatePostUpload, isPending: isPendingPostUpload } = useUpload();
   const { userModify, passOfEdit } = useModifyEdit({ serviceMutateFn: useManageOnceHouse });
   const { data: categoriesData } = useManageCategoriesAll();
-  const { data: realitysData } = useRealtys();
+  const { data: realitysData } = useRealtysAll();
 
   const {
     control,
