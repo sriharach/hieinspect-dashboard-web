@@ -3,6 +3,7 @@
 // libs
 import React from 'react';
 import { Input, Select, SelectItem } from '@heroui/react';
+import clsx from 'clsx';
 
 // components
 import Layout from '@/components/modules/layouts/Layout';
@@ -11,13 +12,16 @@ import { HeroDeleteIcon, HeroUploadMinimalisticIcon } from '@/components/assets/
 
 import styles from './modify.module.scss';
 import useModityHouse from '../controllers/useModityHouse';
+import BoxFileUpload from '@/components/modules/BoxFileUpload/BoxFileUpload';
 
 const Modify = () => {
   const {
     categories,
     realitys,
     inputUploadRef,
+    boxUploadRef,
     imageSrcs,
+    imageSrcCoverImg,
     isLoading,
     errors,
     control,
@@ -25,19 +29,25 @@ const Modify = () => {
     handleCancelModify,
     handleSubmitForm,
     onUploadFile,
+    onBoxUploadFile,
     onChanageFile,
+    onChanageBoxFile,
     onRemoveFile,
+    onRemoveCoverfile,
   } = useModityHouse();
 
   return (
     <Layout>
       <form className={styles['modify']} onSubmit={handleSubmitForm}>
-        <div className={styles['modify-menu-cover-image']}>
-          <div className={styles['modify-menu-cover-image-content']}>
-            <HeroUploadMinimalisticIcon />
-            <span>รูปปกโครงการ</span>
-          </div>
-        </div>
+        <BoxFileUpload
+          title="อัปโหลดรูปโครงการ"
+          checkPreview={!!imageSrcCoverImg?.base64}
+          readonlySrc={imageSrcCoverImg?.base64}
+          ref={boxUploadRef}
+          onRemoveCoverfile={(filename) => onRemoveCoverfile(filename)}
+          onChanageBoxFile={onChanageBoxFile}
+          onClick={onBoxUploadFile}
+        />
         <div className={styles['modify-input-form-wrapper']}>
           <Controller
             control={control}
@@ -96,14 +106,7 @@ const Modify = () => {
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 min-h-[120px]">
               {imageSrcs.map((src, index) => {
                 return (
-                  <div
-                    key={index}
-                    className="relative w-32 h-32 md:w-[160px] md:h-[160px]"
-                    // style={{
-                    //   backgroundImage: `url("${src.base64}")`,
-                    //   backgroundSize: 'cover',
-                    // }}
-                  >
+                  <div key={index} className="relative w-32 h-32 md:w-[160px] md:h-[160px]">
                     <img
                       src={src.base64}
                       alt="preview"
@@ -129,23 +132,14 @@ const Modify = () => {
               <strong className="text-sm">Upload</strong>
             </div>
           )}
-          <div className="grid space-y-1">
-            <span className="text-sm text-red-600">
-              ** รูปภาพขนาดไม่เกิน {process.env.FILE_MAX_SIZE} **
+          <div className="grid space-y-1 text-sm">
+            <span className="text-orange-500">
+              ** รูปภาพขนาดไม่เกิน {process.env.AMOUNT_LIMIT_IMAGE} **
             </span>
-            <span className="text-sm">
+            <span>
               จำนวนรูปภาพที่อัพโหลดได้ {Number(process.env.AMOUNT_LIMIT_IMAGE) - imageSrcs.length}
             </span>
           </div>
-          <input
-            id="input-upload"
-            multiple
-            hidden
-            ref={inputUploadRef}
-            type="file"
-            onChange={onChanageFile}
-            accept=".jpeg,.png"
-          />
 
           <div className={styles['modify-content-button']}>
             <Button fullWidth color="primary" isLoading={isLoading} type="submit">
@@ -157,6 +151,16 @@ const Modify = () => {
           </div>
         </div>
       </form>
+
+      <input
+        id="input-upload"
+        multiple
+        hidden
+        ref={inputUploadRef}
+        type="file"
+        onChange={onChanageFile}
+        accept="image/*"
+      />
     </Layout>
   );
 };

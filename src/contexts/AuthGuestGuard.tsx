@@ -24,6 +24,10 @@ const AuthGuestGuard = ({ children }: { children: React.ReactNode }) => {
         return router.push('/dashboard');
       }
 
+      if (whiteListAuth.includes(pathName)) {
+        router.push('/dashboard');
+      }
+
       // if (pathName && !whiteListAuth.includes(pathName)) {
       //   router.push(pathName + '?' + searchParams.toString());
       // } else {

@@ -20,6 +20,8 @@ export interface IManageHouse {
   category_house?: {
     name: string
   };
+  main_img_house?: string
+  cover_image_house?: string
 }
 
 export type IHouseImages = {
@@ -31,7 +33,7 @@ export type IHouseImages = {
 };
 
 export interface RequestManageHouse
-  extends Pick<IManageHouse, 'name' | 'category_house_id' | 'id' | 'realitys_id' | 'is_active'> {
+  extends Pick<IManageHouse, 'name' | 'category_house_id' | 'id' | 'realitys_id' | 'is_active' | 'main_img_house' | 'cover_image_house'> {
   house_images_upload?: ResponseUploadPath[];
   exclude_filename?: string[];
 }

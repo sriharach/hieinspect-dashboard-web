@@ -7,6 +7,7 @@ import useUpload from '@/hooks/useMutation/useUpload';
 import useManageCategoriesAll from '@/hooks/useQuery/useManageCategoriesAll';
 import useRealtysAll from '@/hooks/useQuery/useRealtysAll';
 import { RequestManageHouse } from '@/types/models/manageHouse';
+import { ResponseUploadPath } from '@/types/models/upload';
 import { addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
@@ -17,7 +18,7 @@ const useModityRealty = () => {
 
   // state
   const inputUploadRef = useRef<HTMLInputElement | null>(null);
-
+  const boxUploadRef = useRef<HTMLInputElement | null>(null);
   const [imageSrcs, setImageSrcs] = useState<
     {
       base64?: string;
@@ -25,6 +26,11 @@ const useModityRealty = () => {
       fileName?: string;
     }[]
   >([]);
+  const [imageSrcCoverImg, setImageSrcCoverImg] = useState<{
+    base64?: string;
+    file: File;
+    fileName?: string;
+  } | null>(null);
   const [excludeFilename, setExcludeFilename] = useState<string[]>([]);
 
   // hooks
@@ -54,6 +60,7 @@ const useModityRealty = () => {
   const handleSubmitForm = handleSubmit(async (data) => {
     if (passOfEdit) {
       let uploaded = undefined;
+      let mainImgHouse = undefined;
 
       // หาไฟล์ภาพทำการอัพโหลดอีกรอบ
       if (imageSrcs.length > 0) {
@@ -61,16 +68,26 @@ const useModityRealty = () => {
         uploaded = await Promise.all(
           imageSrcs
             .filter((x) => x.file)
-            .map(async (ifm) => (await mutatePostUpload({ code_house: userModify!.code_house!, file: ifm.file })).data),
+            .map(
+              async (ifm) =>
+                (await mutatePostUpload({ code_house: userModify!.code_house!, file: ifm.file }))
+                  .data,
+            ),
         );
       }
 
-      const model: any = {
+      // check cover image
+      if (imageSrcCoverImg) {
+        mainImgHouse =  (await mutatePostUpload({ code_house: userModify!.code_house!, file: imageSrcCoverImg.file })).data.file_name
+      }
+
+      const model = {
         ...data,
         id: userModify?.id,
         exclude_filename: excludeFilename,
         code_house: userModify?.code_house,
         house_images_upload: uploaded || [],
+        main_img_house: mainImgHouse,
       };
 
       // update file path in to api
@@ -82,25 +99,38 @@ const useModityRealty = () => {
       });
     } else {
       const response = await mutatePost({ ...data, house_images_upload: [] });
-      if (response.data.code_house) {
+      if (response.data.code_house && (imageSrcCoverImg || imageSrcs.length > 0)) {
+        let uploaded: ResponseUploadPath[] = [];
+        let mainImgHouse = undefined;
+
         if (imageSrcs.length > 0) {
           // call save image
-          const uploaded = await Promise.all(
+          uploaded = await Promise.all(
             imageSrcs.map(
-              async (ifm) => (await mutatePostUpload({ code_house: response.data.code_house, file: ifm.file })).data,
+              async (ifm) =>
+                (await mutatePostUpload({ code_house: response.data.code_house, file: ifm.file }))
+                  .data,
             ),
           );
-
-          // update file path in to api
-          await mutateHousePut(
-            { id: response.data.id, house_images_upload: uploaded },
-            {
-              onSuccess: () => {
-                addToast({ title: 'Add house success', color: 'success' });
-              },
-            },
-          );
         }
+        if (imageSrcCoverImg) {
+          mainImgHouse = (
+            await mutatePostUpload({
+              code_house: response.data.code_house,
+              file: imageSrcCoverImg.file,
+            })
+          ).data.file_name;
+        }
+
+        // update file path in to api
+        await mutateHousePut(
+          { id: response.data.id, house_images_upload: uploaded, main_img_house: mainImgHouse },
+          {
+            onSuccess: () => {
+              addToast({ title: 'Add house success', color: 'success' });
+            },
+          },
+        );
       }
       router.push('/manage-house');
     }
@@ -108,6 +138,9 @@ const useModityRealty = () => {
 
   const handleUploadFile = () => {
     inputUploadRef.current?.click();
+  };
+  const handleBoxUploadFile = () => {
+    boxUploadRef.current?.click();
   };
 
   const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -118,10 +151,31 @@ const useModityRealty = () => {
         const file = files[i];
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImageSrcs((prevImageSrcs) => [...prevImageSrcs, { file, base64: reader.result as string }]);
+          setImageSrcs((prevImageSrcs) => [
+            ...prevImageSrcs,
+            { file, base64: reader.result as string },
+          ]);
         };
         reader.readAsDataURL(file);
       }
+
+      event.target.value = ''; // reset file
+    }
+  };
+
+  const handleChanageBoxFile = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrcCoverImg((prevImageSrcCoverImg) => ({
+          ...prevImageSrcCoverImg,
+          file,
+          base64: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
 
       event.target.value = ''; // reset file
     }
@@ -132,7 +186,13 @@ const useModityRealty = () => {
     if (fileName) {
       setExcludeFilename((prev) => [...prev, fileName]);
     }
-    
+  };
+
+  const handleRemoveCoverfile = (fileName?: string) => {
+    setImageSrcCoverImg(null);
+    if (fileName) {
+      setExcludeFilename((prev) => [...prev, fileName]);
+    }
   };
 
   const categories = useMemo(() => {
@@ -160,8 +220,15 @@ const useModityRealty = () => {
               fileName: val.file_name,
               file: undefined,
             };
-          }) as any,
+          }) as never,
         );
+      }
+      if (userModify.cover_image_house) {
+        setImageSrcCoverImg({
+          base64: userModify.cover_image_house,
+          fileName: userModify.main_img_house,
+          file: undefined,
+        } as never);
       }
     }
   }, [userModify]);
@@ -173,13 +240,18 @@ const useModityRealty = () => {
     errors,
     control,
     inputUploadRef,
+    boxUploadRef,
     imageSrcs,
+    imageSrcCoverImg,
     Controller,
     handleCancelModify,
     handleSubmitForm,
     onUploadFile: handleUploadFile,
+    onBoxUploadFile: handleBoxUploadFile,
     onChanageFile: handleChangeFile,
+    onChanageBoxFile: handleChanageBoxFile,
     onRemoveFile: handleRemoveFile,
+    onRemoveCoverfile: handleRemoveCoverfile,
   };
 };
 
