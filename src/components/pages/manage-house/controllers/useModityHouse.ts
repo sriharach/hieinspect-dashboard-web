@@ -32,6 +32,7 @@ const useModityRealty = () => {
     fileName?: string;
   } | null>(null);
   const [excludeFilename, setExcludeFilename] = useState<string[]>([]);
+  const [errorCoverimage, setErrorCoverimage] = useState('');
 
   // hooks
   const { mutateAsync: mutatePost, isPending: isPendingPost } = useManageHouse();
@@ -58,6 +59,8 @@ const useModityRealty = () => {
   };
 
   const handleSubmitForm = handleSubmit(async (data) => {
+    if (!imageSrcCoverImg) return setErrorCoverimage('กรุณาอัปโหลดภาพปก');
+
     if (passOfEdit) {
       let uploaded = undefined;
       let mainImgHouse = undefined;
@@ -78,7 +81,12 @@ const useModityRealty = () => {
 
       // check cover image
       if (imageSrcCoverImg) {
-        mainImgHouse =  (await mutatePostUpload({ code_house: userModify!.code_house!, file: imageSrcCoverImg.file })).data.file_name
+        mainImgHouse = (
+          await mutatePostUpload({
+            code_house: userModify!.code_house!,
+            file: imageSrcCoverImg.file,
+          })
+        ).data.file_name;
       }
 
       const model = {
@@ -165,6 +173,7 @@ const useModityRealty = () => {
 
   const handleChanageBoxFile = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
+      setErrorCoverimage('');
       const file = event.target.files[0];
 
       const reader = new FileReader();
@@ -190,6 +199,7 @@ const useModityRealty = () => {
 
   const handleRemoveCoverfile = (fileName?: string) => {
     setImageSrcCoverImg(null);
+    setErrorCoverimage('');
     if (fileName) {
       setExcludeFilename((prev) => [...prev, fileName]);
     }
@@ -243,6 +253,7 @@ const useModityRealty = () => {
     boxUploadRef,
     imageSrcs,
     imageSrcCoverImg,
+    errorCoverimage,
     Controller,
     handleCancelModify,
     handleSubmitForm,

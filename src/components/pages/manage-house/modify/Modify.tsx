@@ -25,6 +25,7 @@ const Modify = () => {
     isLoading,
     errors,
     control,
+    errorCoverimage,
     Controller,
     handleCancelModify,
     handleSubmitForm,
@@ -40,6 +41,8 @@ const Modify = () => {
     <Layout>
       <form className={styles['modify']} onSubmit={handleSubmitForm}>
         <BoxFileUpload
+          isValid={!!errorCoverimage}
+          messageError={errorCoverimage}
           title="อัปโหลดรูปโครงการ"
           checkPreview={!!imageSrcCoverImg?.base64}
           readonlySrc={imageSrcCoverImg?.base64}
@@ -133,8 +136,8 @@ const Modify = () => {
             </div>
           )}
           <div className="grid space-y-1 text-sm">
-            <span className="text-orange-500">
-              ** รูปภาพขนาดไม่เกิน {process.env.AMOUNT_LIMIT_IMAGE} **
+            <span className="text-orange-500 font-medium">
+              ** รูปภาพขนาดไม่เกิน {process.env.FILE_MAX_SIZE} **
             </span>
             <span>
               จำนวนรูปภาพที่อัพโหลดได้ {Number(process.env.AMOUNT_LIMIT_IMAGE) - imageSrcs.length}

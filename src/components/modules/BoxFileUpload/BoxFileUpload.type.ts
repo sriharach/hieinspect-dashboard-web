@@ -5,4 +5,6 @@ export interface BoxFileUploadProps {
     onClick?():  void
     onChanageBoxFile?(event: React.ChangeEvent<HTMLInputElement>): void
     onRemoveCoverfile?(fileName: string): void
+    isValid?: boolean
+    messageError?: React.ReactNode
 }
