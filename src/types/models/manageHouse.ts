@@ -15,10 +15,12 @@ export interface IManageHouse {
   code_house?: string;
   house_images?: IHouseImages[];
   realty?: {
-    name: string;
+    id?: string
+    name?: string;
   };
   category_house?: {
-    name: string
+    id?: string
+    name?: string
   };
   main_img_house?: string
   cover_image_house?: string

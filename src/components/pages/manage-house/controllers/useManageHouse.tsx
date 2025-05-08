@@ -29,6 +29,7 @@ const useManageHouse = () => {
     page,
     search,
   });
+  console.log('data', data)
   const { mutate } = useManageHouseRemove();
 
   const columns: ColumnsType<IManageHouse> = [
@@ -86,9 +87,11 @@ const useManageHouse = () => {
           name: item.name,
           created_date: item.created_date,
           realty: {
+            id: item.realty?.id,
             name: item.realty ? item.realty.name : '-',
           },
           category_house: {
+            id: item.category_house?.id,
             name: item.category_house ? item.category_house.name : '-',
           },
         };

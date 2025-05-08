@@ -11,7 +11,6 @@ const useModifyHouseCategories = () => {
   const router = useRouter();
 
   const { passOfEdit, userModify } = useModifyEdit({ serviceMutateFn: useManageOnceHouseCategories });
-  console.log('userModify :>> ', userModify);
   const { mutate: mutatePost, isPending: isPendingPost } = useManageHouseCategories();
   const { mutate: mutateUpdate, isPending: isPendingUpdate } = useManageUpdateHouseCatagories();
 

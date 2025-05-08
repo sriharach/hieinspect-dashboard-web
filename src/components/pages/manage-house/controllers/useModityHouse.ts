@@ -49,8 +49,8 @@ const useModityRealty = () => {
   } = useForm<RequestManageHouse>({
     values: {
       name: userModify?.name,
-      category_house_id: userModify?.category_house_id,
-      realitys_id: userModify?.realitys_id,
+      category_house_id: userModify?.category_house?.id,
+      realitys_id: userModify?.realty?.id,
     },
   });
 
@@ -80,7 +80,7 @@ const useModityRealty = () => {
       }
 
       // check cover image
-      if (imageSrcCoverImg) {
+      if (imageSrcCoverImg.file) {
         mainImgHouse = (
           await mutatePostUpload({
             code_house: userModify!.code_house!,
