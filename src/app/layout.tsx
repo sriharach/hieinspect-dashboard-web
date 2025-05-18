@@ -14,9 +14,9 @@ const kanitFont = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: 'HIEinspect dashboard',
-  description: 'Dashboard hieinspect manager reviewer house service',
-  applicationName: 'HIEinspect of us',
+  title: 'wisdom-construction dashboard',
+  description: 'Dashboard wisdom-construction manager reviewer house service',
+  applicationName: 'wisdom-construction of us',
 };
 
 export default function RootLayout({

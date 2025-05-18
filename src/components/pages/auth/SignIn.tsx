@@ -51,7 +51,7 @@ const SignIn = () => {
   return (
     <AuthLayout>
       <div className="border rounded-lg bg-transparent max-w-[640px] w-full p-8 backdrop-blur-lg">
-        <div className="text-center text-4xl font-bold mb-6">Hieinspect Login</div>
+        <div className="text-center text-4xl font-bold mb-6">Wisdom Construction Login</div>
         <form className="flex flex-col space-y-4" onSubmit={handleSubmitLogin}>
           <Input
             {...register('username', {
