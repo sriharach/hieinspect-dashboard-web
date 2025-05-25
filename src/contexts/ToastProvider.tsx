@@ -1,7 +1,7 @@
 import { HeroUIProvider } from '@heroui/react';
 import { ToastProvider } from '@heroui/toast';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function ToastProviders({ children }: { children: React.ReactNode }) {
   return (
     <HeroUIProvider>
       <ToastProvider placement="top-right" toastOffset={30} />

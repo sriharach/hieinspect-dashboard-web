@@ -4,7 +4,7 @@
 import AuthLayout from '@/components/modules/layouts/AuthLayout';
 
 // libs
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Input, Button, addToast } from '@heroui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -20,7 +20,7 @@ const SignIn = () => {
   const router = useRouter();
 
   const { mutate, isPending } = useAuthSignIn();
-  const { authenticate, isAuthenticated } = useAuth();
+  const { authenticate } = useAuth();
 
   // form
   const {
@@ -48,16 +48,10 @@ const SignIn = () => {
     });
   });
 
-  useEffect(() => {
-    if (isAuthenticated) router.forward();
-  }, [isAuthenticated]);
-
   return (
     <AuthLayout>
       <div className="border rounded-lg bg-transparent max-w-[640px] w-full p-8 backdrop-blur-lg">
-        <div className="text-center text-4xl font-bold mb-6">
-          Hieinspect Login
-        </div>
+        <div className="text-center text-4xl font-bold mb-6">Wisdom Construction Login</div>
         <form className="flex flex-col space-y-4" onSubmit={handleSubmitLogin}>
           <Input
             {...register('username', {
@@ -80,12 +74,7 @@ const SignIn = () => {
             label="Password"
             type="password"
           />
-          <Button
-            color="primary"
-            type="submit"
-            className="p-2 text-white"
-            isLoading={isPending}
-          >
+          <Button color="primary" type="submit" className="p-2 text-white" isLoading={isPending}>
             Login
           </Button>
         </form>

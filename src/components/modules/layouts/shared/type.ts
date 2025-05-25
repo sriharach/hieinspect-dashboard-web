@@ -1,4 +1,4 @@
-export interface NavbarWrapperProps {
+export interface NavbarWrapperProps extends SideBarWrapperProps {
     children?: React.ReactNode;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }

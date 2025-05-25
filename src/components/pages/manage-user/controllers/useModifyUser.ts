@@ -1,3 +1,6 @@
+import useModifyEdit from '@/hooks/useModifyEdit';
+import useMangeOnceUser from '@/hooks/useMutation/useManageOnceUser';
+import useManageUpdateUser from '@/hooks/useMutation/useManageUpdateUser';
 import useManageUser from '@/hooks/useMutation/useManageUser';
 import useManageRole from '@/hooks/useQuery/useManageRole';
 import { RequestManageUser } from '@/types/models/manageUser';
@@ -7,25 +10,45 @@ import { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 const useModifyUser = () => {
-  // hook
   const router = useRouter();
-  const { data } = useManageRole();
-  const { mutate, isPending } = useManageUser();
 
-  const { handleSubmit, register, formState, control } =
-    useForm<RequestManageUser>();
+  // hook
+  const { data } = useManageRole();
+  const { mutate: mutatePost, isPending: isLoadingPost } = useManageUser();
+  const { mutate: mutateUpdate, isPending: isPendingUpdate } = useManageUpdateUser();
+  const { userModify, passOfEdit } = useModifyEdit({ serviceMutateFn: useMangeOnceUser });
+
+  const { handleSubmit, formState, control } = useForm<RequestManageUser>({
+    values: { user_name: userModify?.user_name, role_id: userModify?.role.id, first_name: userModify?.first_name },
+  });
 
   const handleCancelModify = () => {
     router.back();
   };
 
   const handleSubmitForm = handleSubmit((data) => {
-    mutate(data, {
-      onSuccess: () => {
-        addToast({ color: 'success', title: 'User added success' });
-        router.back();
-      },
-    });
+    if (passOfEdit) {
+      mutateUpdate(
+        {
+          id: userModify?.id,
+          user_name: data.user_name,
+          first_name: data.first_name,
+        },
+        {
+          onSuccess: () => {
+            addToast({ color: 'success', title: 'User edited success' });
+            router.back();
+          },
+        },
+      );
+    } else {
+      mutatePost(data, {
+        onSuccess: () => {
+          addToast({ color: 'success', title: 'User added success' });
+          router.back();
+        },
+      });
+    }
   });
 
   const roles = useMemo(() => {
@@ -39,11 +62,10 @@ const useModifyUser = () => {
   }, [data]);
 
   return {
-    isLoading: isPending,
+    isLoading: isLoadingPost || isPendingUpdate,
     handleCancelModify,
     handleSubmitForm,
     roles,
-    register,
     errors: formState.errors,
     Controller,
     control,

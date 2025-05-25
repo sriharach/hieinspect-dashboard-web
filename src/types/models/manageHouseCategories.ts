@@ -1,6 +1,6 @@
 export interface IManageHouseCategories {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   is_active?: boolean;
   created_date?: string;
   created_by?: string;
@@ -8,4 +8,4 @@ export interface IManageHouseCategories {
   updated_by?: string;
 }
 
-export type RequestManageHouseCategories = Pick<IManageHouseCategories, 'name' | 'id'>
+export type RequestManageHouseCategories = Pick<IManageHouseCategories, 'name' | 'id'|'is_active'>

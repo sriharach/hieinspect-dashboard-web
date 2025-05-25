@@ -1,0 +1,7 @@
+.box-file-upload {
+    @apply border border-gray-400 h-60 rounded-lg cursor-pointer flex-1 border-dashed;
+
+    &-content {
+        @apply flex flex-col items-center justify-center h-full space-y-2 text-gray-400;
+    }
+}

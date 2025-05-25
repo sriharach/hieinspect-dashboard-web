@@ -1,0 +1,11 @@
+.modify {
+    @apply flex flex-wrap flex-row-reverse shrink-0 max-w-5xl gap-6;
+
+    &-input-form-wrapper {
+        @apply flex flex-col space-y-6 w-full lg:w-[512px]
+    }
+
+    &-content-button {
+        @apply flex flex-row space-x-3 w-[270px];
+    }
+}

@@ -25,7 +25,7 @@ const SidebarWrapper = ({ collapsed }: SideBarWrapperProps) => {
           '!translate-x-0': collapsed,
         })}
       >
-        <h1 className={styles['sidebar-wrapper-aside-header']}>HIEspect</h1>
+        <h1 className={styles['sidebar-wrapper-aside-header']}>Wisdom Construction</h1>
         <div className={styles['sidebar-wrapper-aside-href']}>
           <div className="flex flex-col flex-1 gap-3">
             <h3 id="main" className="text-xs font-normal">

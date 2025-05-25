@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 const useManageRole = () => {
   return useMutation({
     mutationKey: [constatentKey.POST_ROLE_MANAGE_KEY],
-    mutationFn: (payload: IManageRoles['name']) => POST_ROLE_SERVICE(payload),
+    mutationFn: (payload: IManageRoles) => POST_ROLE_SERVICE(payload),
   });
 };
 

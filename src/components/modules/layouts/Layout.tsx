@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className={styles['layout']}>
       <SidebarWrapper collapsed={collapsed} />
-      <NavbarWrapper setCollapsed={setCollapsed} />
+      <NavbarWrapper setCollapsed={setCollapsed} collapsed={collapsed} />
       <section className={styles['layout-section']}>
         <Card className={styles['layout-card']} shadow="lg">
           {children}

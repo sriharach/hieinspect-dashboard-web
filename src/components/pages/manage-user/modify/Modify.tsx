@@ -12,16 +12,7 @@ import styles from './modify.module.scss';
 import useModifyUser from '../controllers/useModifyUser';
 
 const Modify = () => {
-  const {
-    handleCancelModify,
-    handleSubmitForm,
-    roles,
-    register,
-    errors,
-    Controller,
-    control,
-    isLoading,
-  } = useModifyUser();
+  const { handleCancelModify, handleSubmitForm, roles, errors, Controller, control, isLoading } = useModifyUser();
 
   return (
     <Layout>
@@ -39,6 +30,8 @@ const Modify = () => {
             return (
               <Select
                 {...field}
+                selectedKeys={[field.value ?? 'all']}
+                // defaultSelectedKeys={[field.value ?? 'all']}
                 label="Select a roles"
                 errorMessage={errors.role_id?.message}
                 isInvalid={!!errors.role_id?.message}
@@ -52,33 +45,33 @@ const Modify = () => {
             );
           }}
         />
-        <Input
-          {...register('user_name', {
-            required: { value: true, message: 'Request!' },
-          })}
-          errorMessage={errors.user_name?.message}
-          isInvalid={!!errors.user_name?.message}
-          label="Username / Email"
+        <Controller
+          control={control}
+          name="user_name"
+          rules={{ required: { value: true, message: 'Request!' } }}
+          render={({ field }) => {
+            return (
+              <Input
+                {...field}
+                errorMessage={errors.user_name?.message}
+                isInvalid={!!errors.user_name?.message}
+                label="Username / Email"
+              />
+            );
+          }}
         />
-        <Input
-          {...register('password', {
-            required: { value: true, message: 'Request!' },
-          })}
-          errorMessage={errors.password?.message}
-          isInvalid={!!errors.password?.message}
-          type="password"
-          label="Password"
+        <Controller
+          control={control}
+          name="first_name"
+          render={({ field }) => {
+            return <Input {...field} type="text" label="Name" />;
+          }}
         />
         <div className={styles['modify-content-button']}>
           <Button fullWidth color="primary" type="submit" isLoading={isLoading}>
             Submit
           </Button>
-          <Button
-            fullWidth
-            color="primary"
-            variant="ghost"
-            onPress={handleCancelModify}
-          >
+          <Button fullWidth color="primary" variant="ghost" onPress={handleCancelModify}>
             Cancel
           </Button>
         </div>
